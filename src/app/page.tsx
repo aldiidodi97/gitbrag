@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { UserSearch } from "@/components/search/user-search";
 import { SiteHeader } from "@/components/site/site-header";
 
@@ -11,6 +12,14 @@ export default function HomePage() {
         <section className="flex flex-1 flex-col px-2">
           <div className="border-border relative mx-auto flex w-full max-w-6xl flex-1 flex-col items-center border-x">
             <div className="flex w-full flex-col items-center px-4 py-20 md:py-28">
+              <Image
+                src="/logo.png"
+                alt="GitBrag"
+                width={96}
+                height={96}
+                priority
+                className="mb-5 size-20 md:size-24"
+              />
               <span className="border-border text-foreground inline-flex items-center gap-2 border px-3 py-1 font-mono text-xs tracking-[0.08em] uppercase md:text-sm">
                 <span className="bg-accent size-2 md:size-2.5" />
                 Open-source bragging rights
