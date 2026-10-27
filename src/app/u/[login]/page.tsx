@@ -15,6 +15,7 @@ import { ProjectRanking } from "@/components/profile/project-ranking";
 import { ShareBar } from "@/components/profile/share-bar";
 import { TimelineChart } from "@/components/profile/timeline-chart";
 import { SiteFooter } from "@/components/site/site-footer";
+import { SupportCallout } from "@/components/site/support-callout";
 import { SiteHeader } from "@/components/site/site-header";
 import { ButtonLink } from "@/components/ui/button";
 import {
@@ -341,6 +342,8 @@ async function Report({
         </div>
         <PullRequestList repos={compact.repos} prs={compact.prs} />
       </section>
+
+      <SupportCallout />
     </>
   );
 }

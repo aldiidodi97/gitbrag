@@ -1,6 +1,8 @@
 import Image from "next/image";
 import logo from "@/assets/logo.png";
+import heart from "@/assets/icons/heart.png";
 import { UserSearch } from "@/components/search/user-search";
+import { siteConfig } from "@/lib/site";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 
@@ -44,6 +46,15 @@ export default function HomePage() {
               <span className="text-muted-foreground font-mono text-xs uppercase">
                 No sign-in. Public data only. MIT licensed.
               </span>
+              <a
+                href={siteConfig.supportUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-foreground hover:text-accent mt-3 inline-flex items-center gap-1.5 font-mono text-xs uppercase transition-colors"
+              >
+                <Image src={heart} alt="" className="size-4" />
+                Free and open source · Support me
+              </a>
             </div>
           </div>
         </section>
