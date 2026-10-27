@@ -11,12 +11,11 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { formatCompact, formatNumber } from "@/lib/utils";
 import { siteConfig } from "@/lib/site";
-import { CardsCarousel } from "./cards-carousel";
 import { getExample } from "./example";
 
 export function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <span className="border-border text-muted-foreground inline-flex items-center gap-2 border px-3 py-1.5 font-mono text-[11px] tracking-[0.18em] uppercase">
+    <span className="border-border text-muted-foreground inline-flex items-center gap-2 rounded-md border px-3 py-1.5 font-mono text-[11px] tracking-[0.18em] uppercase">
       <span className="text-accent">[</span>
       {children}
       <span className="text-accent">]</span>
@@ -38,38 +37,34 @@ const marquee = [
 ];
 
 export function Marquee() {
-  const items = [...marquee, ...marquee];
   return (
     <section
       id="customers"
-      className="border-border w-full overflow-hidden border-b"
+      className="border-border w-full border-b px-6 py-8 sm:px-10"
     >
-      <p className="border-border text-muted-foreground border-b px-6 py-3 text-center font-mono text-[11px] tracking-[0.16em] uppercase sm:px-10">
-        Profiles people look up on GitBrag
-      </p>
-      <div className="relative py-8">
-        <div className="from-background pointer-events-none absolute inset-y-0 left-0 z-10 w-28 bg-gradient-to-r to-transparent" />
-        <div className="from-background pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l to-transparent" />
-        <div className="marquee-track flex w-max items-center gap-12 pr-12">
-          {items.map((login, i) => (
-            <Link
-              key={`${login}-${i}`}
-              href={`/u/${login}`}
-              className="text-muted-foreground hover:text-accent flex shrink-0 items-center gap-2.5 transition-colors duration-200"
-            >
-              <Image
-                src={`https://github.com/${login}.png?size=48`}
-                alt=""
-                width={24}
-                height={24}
-                className="size-6"
-              />
-              <span className="text-lg font-semibold tracking-tight">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <p className="text-muted-foreground font-mono text-[11px] tracking-[0.16em] uppercase">
+          Profiles people look up on GitBrag
+        </p>
+        <ul className="flex flex-wrap gap-2">
+          {marquee.map((login) => (
+            <li key={login}>
+              <Link
+                href={`/u/${login}`}
+                className="border-border bg-card text-foreground hover:border-border-strong hover:text-accent inline-flex h-9 items-center gap-2 rounded-md border pr-3 pl-1.5 text-sm font-medium transition-colors"
+              >
+                <Image
+                  src={`https://github.com/${login}.png?size=48`}
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="size-6 rounded-sm"
+                />
                 {login}
-              </span>
-            </Link>
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
@@ -126,7 +121,7 @@ export function ProductGrid() {
             style={{ animationDelay: `${i * 80}ms` }}
           >
             <div className="flex items-start justify-between">
-              <span className="border-border-strong text-accent grid size-10 place-items-center border">
+              <span className="border-border-strong text-accent grid size-10 place-items-center rounded-md border">
                 <Icon className="size-4" />
               </span>
               <span className="text-muted-foreground font-mono text-[11px] tracking-[0.14em]">
@@ -179,7 +174,7 @@ export async function HowItWorks() {
                 key={item}
                 className="text-foreground flex items-start gap-3 text-sm leading-6"
               >
-                <span className="bg-accent text-accent-fg mt-0.5 grid size-4 shrink-0 place-items-center">
+                <span className="bg-accent text-accent-fg mt-0.5 grid size-4 shrink-0 place-items-center rounded-sm">
                   <Check className="size-3" />
                 </span>
                 {item}
@@ -188,7 +183,7 @@ export async function HowItWorks() {
           </ul>
         </div>
         <div className="bg-dotgrid flex flex-col justify-center gap-3 p-8 sm:p-12">
-          <div className="border-border-strong bg-background border">
+          <div className="border-border-strong bg-background overflow-hidden rounded-md border">
             <div className="border-border text-muted-foreground flex items-center gap-2 border-b px-3 py-2 font-mono text-[11px] tracking-[0.12em] uppercase">
               <span className="bg-accent size-2" />
               Look up
@@ -197,12 +192,12 @@ export async function HowItWorks() {
               <span className="text-foreground text-sm">
                 github.com/{siteConfig.exampleLogin}
               </span>
-              <span className="bg-accent text-accent-fg grid size-6 shrink-0 place-items-center">
+              <span className="bg-accent text-accent-fg grid size-6 shrink-0 place-items-center rounded-sm">
                 <ArrowRight className="size-3.5" />
               </span>
             </div>
           </div>
-          <div className="border-border bg-background border p-3">
+          <div className="border-border bg-background rounded-md border p-3">
             <p className="text-muted-foreground font-mono text-[10px] tracking-[0.12em] uppercase">
               Merged pull requests · per year
             </p>
@@ -212,7 +207,7 @@ export async function HowItWorks() {
                   <span
                     key={y.year}
                     title={`${y.year}: ${y.merged} merged`}
-                    className="bg-accent/70 grow-y flex-1"
+                    className="bg-accent/70 grow-y flex-1 rounded-sm"
                     style={{
                       height: `${Math.max(4, (y.merged / max) * 100)}%`,
                       animationDelay: `${i * 70}ms`,
@@ -283,13 +278,66 @@ export async function StatsStrip() {
   );
 }
 
+const shareCards = [
+  {
+    format: "og",
+    label: "Link preview",
+    size: "1200 x 630",
+    width: 1200,
+    height: 630,
+  },
+  {
+    format: "square",
+    label: "Square",
+    size: "1080 x 1080",
+    width: 1080,
+    height: 1080,
+  },
+  {
+    format: "story",
+    label: "Story",
+    size: "1080 x 1920",
+    width: 1080,
+    height: 1920,
+  },
+];
+
 export function ShareCarousel() {
+  const login = siteConfig.exampleLogin;
   return (
     <section
       id="share"
-      className="border-border w-full scroll-mt-14 border-b px-6 py-16 sm:px-10 sm:py-28"
+      className="border-border w-full scroll-mt-14 border-b px-6 py-16 sm:px-10 sm:py-24"
     >
-      <CardsCarousel login={siteConfig.exampleLogin} />
+      <div className="max-w-2xl">
+        <Eyebrow>Share</Eyebrow>
+        <h2 className="text-foreground mt-6 text-3xl leading-[1.05] font-semibold tracking-[-0.03em] text-balance sm:text-4xl">
+          One link, three images, one README badge.
+        </h2>
+        <p className="text-muted-foreground mt-5 max-w-md leading-7 text-pretty">
+          Every profile link unfurls into a preview card on X, LinkedIn,
+          Bluesky, Threads, WhatsApp and Slack. The same card downloads as a
+          square or story PNG, and the SVG badge updates itself.
+        </p>
+      </div>
+      <div className="mt-10 flex flex-col gap-6 md:flex-row md:items-end md:gap-5">
+        {shareCards.map((card) => (
+          <figure key={card.format} className="flex flex-col gap-2">
+            <Image
+              src={`/api/card/${login}.png?format=${card.format}`}
+              alt={`${card.label} share card for ${login}`}
+              width={card.width}
+              height={card.height}
+              unoptimized
+              loading="eager"
+              className="border-border h-44 w-auto rounded-lg border md:h-64"
+            />
+            <figcaption className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
+              {card.label} · {card.size}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
     </section>
   );
 }
@@ -297,30 +345,27 @@ export function ShareCarousel() {
 export function Cta() {
   return (
     <section className="w-full px-6 py-20 sm:px-10">
-      <div className="bg-hatch border-border border">
-        <div className="border-border-strong bg-background relative m-3 border px-6 py-16 text-center sm:px-10 sm:py-20">
-          <Corners inset="inset-3" />
-          <h2 className="text-foreground mx-auto block max-w-2xl text-4xl leading-[1.0] font-semibold tracking-[-0.03em] text-balance sm:text-6xl">
-            <span className="block">Stop underselling.</span>
-            <span className="block">Start bragging.</span>
-          </h2>
-          <p className="text-muted-foreground mx-auto mt-5 max-w-md leading-7 text-pretty">
-            Type a username, get the page and the cards. It takes a few seconds
-            and no account.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-            <ButtonLink href="/#search">
-              Get your card <ArrowRight />
-            </ButtonLink>
-            <ButtonLink
-              href={siteConfig.repoUrl}
-              variant="outline"
-              target="_blank"
-              rel="noreferrer"
-            >
-              View the source
-            </ButtonLink>
-          </div>
+      <div className="border-border bg-accent-soft relative rounded-xl border px-6 py-16 text-center sm:px-10 sm:py-20">
+        <h2 className="text-foreground mx-auto block max-w-2xl text-4xl leading-[1.0] font-semibold tracking-[-0.03em] text-balance sm:text-6xl">
+          <span className="block">Stop underselling.</span>
+          <span className="block">Start bragging.</span>
+        </h2>
+        <p className="text-muted-foreground mx-auto mt-5 max-w-md leading-7 text-pretty">
+          Type a username, get the page and the cards. It takes a few seconds
+          and no account.
+        </p>
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <ButtonLink href="/#search">
+            Get your card <ArrowRight />
+          </ButtonLink>
+          <ButtonLink
+            href={siteConfig.repoUrl}
+            variant="outline"
+            target="_blank"
+            rel="noreferrer"
+          >
+            View the source
+          </ButtonLink>
         </div>
       </div>
     </section>

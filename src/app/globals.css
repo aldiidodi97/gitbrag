@@ -3,34 +3,34 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --bg: #ffffff;
-  --bg-elev: #f9fafa;
-  --fg: #0c1015;
-  --fg-muted: #5f646b;
-  --border: #0c101517;
-  --border-strong: #0c101533;
-  --accent: #0056ef;
+  --bg: #fcfcfa;
+  --bg-elev: #f4f4f0;
+  --fg: #14161c;
+  --fg-muted: #676b76;
+  --border: #14161c1a;
+  --border-strong: #14161c3a;
+  --accent: #2563eb;
   --accent-fg: #ffffff;
-  --danger: #df202e;
-  --success: #009957;
-  --warning: #e89d00;
+  --danger: #d1343f;
+  --success: #15803d;
+  --warning: #d97706;
 }
 
 .dark {
-  --bg: #0a0d13;
-  --bg-elev: #12161d;
-  --fg: #f0f2f4;
-  --fg-muted: #8d939a;
-  --border: #ffffff12;
-  --border-strong: #ffffff29;
-  --accent: #4685ff;
-  --accent-fg: #090d16;
+  --bg: #0e1116;
+  --bg-elev: #161a21;
+  --fg: #eceef2;
+  --fg-muted: #949aa6;
+  --border: #ffffff14;
+  --border-strong: #ffffff2e;
+  --accent: #5b9dff;
+  --accent-fg: #0b1220;
   color-scheme: dark;
 }
 
 @theme inline {
-  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 
   --color-background: var(--bg);
   --color-foreground: var(--fg);
@@ -52,11 +52,11 @@
   --color-warning: var(--warning);
   --color-ring: var(--accent);
 
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
 }
 
 * {
@@ -83,7 +83,7 @@ body {
   background-size: 22px 22px;
 }
 
-.bg-hatch {
+.bg-hatch-unused {
   background-image: repeating-linear-gradient(
     -45deg,
     color-mix(in oklch, var(--fg) 8%, transparent) 0,

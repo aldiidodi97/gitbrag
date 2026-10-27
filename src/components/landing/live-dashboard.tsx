@@ -4,7 +4,6 @@ import {
   GitMerge,
   Languages,
   LayoutDashboard,
-  Settings,
   Share2,
   Star,
 } from "lucide-react";
@@ -20,7 +19,6 @@ const sidebar = [
   { label: "Projects", Icon: FolderGit2 },
   { label: "Languages", Icon: Languages },
   { label: "Share", Icon: Share2 },
-  { label: "Settings", Icon: Settings },
 ];
 
 function Sparkline({
@@ -118,7 +116,7 @@ export async function LiveDashboard() {
     <div className="relative px-6 pb-6 sm:px-10">
       <div className="rise relative" style={{ animationDelay: "320ms" }}>
         <div className="bg-dotgrid bg-accent/[0.06] pointer-events-none absolute -inset-x-4 -top-6 bottom-0 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-        <div className="border-border-strong bg-background relative border shadow-[0_-1px_0_0_var(--border)]">
+        <div className="border-border-strong bg-background relative overflow-hidden rounded-lg border shadow-[0_-1px_0_0_var(--border)]">
           <div className="border-border flex items-center justify-between border-b px-4 py-2.5">
             <div className="text-muted-foreground flex items-center gap-2 font-mono text-[11px] tracking-[0.12em] uppercase">
               <span className="text-accent inline-flex items-center gap-1.5">
@@ -129,30 +127,30 @@ export async function LiveDashboard() {
               <span className="truncate">u / {login}</span>
             </div>
             <div className="text-muted-foreground hidden items-center gap-1.5 sm:flex">
-              <span className="border-border inline-flex items-center gap-1.5 border px-2 py-1 text-[11px]">
+              <span className="border-border inline-flex items-center gap-1.5 rounded-sm border px-2 py-1 text-[11px]">
                 <Calendar className="size-3" /> Last 12 months
               </span>
-              <span className="border-border inline-flex items-center gap-1.5 border px-2 py-1 text-[11px]">
+              <span className="border-border inline-flex items-center gap-1.5 rounded-sm border px-2 py-1 text-[11px]">
                 <Share2 className="size-3" /> Share
               </span>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-[9rem_1fr]">
-            <div className="border-border hidden flex-col gap-0.5 border-r p-2 sm:flex">
-              {sidebar.map(({ label, Icon, active }) => (
-                <span
-                  key={label}
-                  className={
-                    active
-                      ? "bg-accent/10 text-accent flex items-center gap-2.5 px-2.5 py-2 text-[13px] font-medium"
-                      : "text-muted-foreground flex items-center gap-2.5 px-2.5 py-2 text-[13px]"
-                  }
-                >
-                  <Icon className="size-3.5" />
-                  {label}
-                </span>
-              ))}
-            </div>
+          <div className="border-border flex items-center gap-1 overflow-x-auto border-b px-2">
+            {sidebar.map(({ label, Icon, active }) => (
+              <span
+                key={label}
+                className={
+                  active
+                    ? "border-accent text-accent flex items-center gap-2 border-b-2 px-3 py-2.5 text-[13px] font-medium whitespace-nowrap"
+                    : "text-muted-foreground flex items-center gap-2 border-b-2 border-transparent px-3 py-2.5 text-[13px] whitespace-nowrap"
+                }
+              >
+                <Icon className="size-3.5" />
+                {label}
+              </span>
+            ))}
+          </div>
+          <div>
             <div className="min-w-0 p-4">
               {!result ? (
                 <p className="text-muted-foreground p-4 text-sm">
@@ -242,7 +240,7 @@ function Body({ stats }: { stats: ContributionStats }) {
           </div>
         ))}
       </div>
-      <div className="border-border mt-4 border p-4">
+      <div className="border-border mt-4 rounded-md border p-4">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
@@ -265,13 +263,13 @@ function Body({ stats }: { stats: ContributionStats }) {
               )}
             </p>
           </div>
-          <div className="border-border hidden items-center gap-0.5 border sm:flex">
+          <div className="border-border hidden items-center gap-0.5 rounded-md border p-0.5 sm:flex">
             {["3M", "6M", "12M", "ALL"].map((r) => (
               <span
                 key={r}
                 className={
                   r === "12M"
-                    ? "bg-accent text-accent-fg px-2.5 py-1 font-mono text-[10px] tracking-wide uppercase"
+                    ? "bg-accent text-accent-fg rounded-sm px-2.5 py-1 font-mono text-[10px] tracking-wide uppercase"
                     : "text-muted-foreground px-2.5 py-1 font-mono text-[10px] tracking-wide uppercase"
                 }
               >
@@ -301,7 +299,7 @@ function Body({ stats }: { stats: ContributionStats }) {
                 className="flex h-full flex-1 flex-col justify-end gap-1.5"
               >
                 <span
-                  className="bg-accent grow-y w-full"
+                  className="bg-accent grow-y w-full rounded-sm"
                   style={{
                     height: `${Math.max(3, (y.merged / maxYear) * 100)}%`,
                     opacity: 0.45 + (i / years.length) * 0.55,

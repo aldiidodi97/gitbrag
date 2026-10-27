@@ -1,10 +1,7 @@
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { Suspense } from "react";
 import { LiveDashboard } from "@/components/landing/live-dashboard";
-import { RotatingWord } from "@/components/landing/rotating-word";
 import {
-  Corners,
   Cta,
   HowItWorks,
   Marquee,
@@ -31,32 +28,12 @@ export default function HomePage() {
               <div className="hero-glow pointer-events-none absolute inset-x-0 top-0 h-[440px]" />
               <div className="bg-dotgrid pointer-events-none absolute inset-0 hidden [background-image:radial-gradient(var(--accent)_1.5px,transparent_1.5px)] [mask-image:radial-gradient(40%_55%_at_78%_30%,black,transparent_70%)] opacity-60 md:block" />
               <div className="relative px-6 pt-20 pb-14 sm:px-10 sm:pt-24">
-                <Corners />
-                <Link
-                  href="/#share"
-                  className="rise border-border bg-card hover:border-border-strong group inline-flex items-center gap-2 border py-1 pr-3 pl-1 text-sm transition-colors"
-                >
-                  <span className="bg-accent text-accent-fg px-2 py-0.5 font-mono text-[10px] tracking-[0.12em] uppercase">
-                    New
-                  </span>
-                  <span className="text-muted-foreground">
-                    Story-size share cards are live
-                  </span>
-                  <ArrowRight className="text-muted-foreground size-3.5 transition-transform group-hover:translate-x-0.5" />
-                </Link>
                 <h1
                   className="rise text-foreground mt-7 max-w-4xl text-5xl leading-[0.98] font-semibold tracking-[-0.035em] text-balance sm:text-7xl"
                   style={{ animationDelay: "80ms" }}
                 >
-                  Open-source bragging rights for{" "}
-                  <RotatingWord
-                    words={[
-                      "maintainers.",
-                      "contributors.",
-                      "first-timers.",
-                      "you.",
-                    ]}
-                  />
+                  Your open-source work,{" "}
+                  <span className="text-accent">worth bragging about.</span>
                 </h1>
                 <p
                   className="rise text-muted-foreground mt-6 max-w-xl text-base leading-7 text-pretty sm:text-lg"
@@ -133,7 +110,7 @@ function DashboardFallback() {
     <div className="relative px-6 pb-6 sm:px-10">
       <div
         aria-busy
-        className="border-border-strong bg-background border p-6 text-sm"
+        className="border-border-strong bg-background rounded-lg border p-6 text-sm"
       >
         <span className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
           Loading the live example from GitHub...

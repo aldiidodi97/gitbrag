@@ -17,7 +17,7 @@ export function MobileMenu({
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="border-border text-foreground grid size-9 place-items-center border [&_svg]:size-4"
+        className="border-border text-foreground grid size-9 place-items-center rounded-md border [&_svg]:size-4"
       >
         {open ? <X /> : <Menu />}
       </button>

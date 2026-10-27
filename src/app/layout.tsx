@@ -4,31 +4,31 @@ import { ThemeProvider } from "next-themes";
 import { siteConfig, getSiteUrl } from "@/lib/site";
 import "./globals.css";
 
-const interTight = localFont({
-  variable: "--font-inter-tight",
+const manrope = localFont({
+  variable: "--font-manrope",
   display: "swap",
   src: [
     {
-      path: "../assets/fonts/inter-tight-latin-wght-normal.woff2",
-      weight: "100 900",
+      path: "../assets/fonts/manrope-latin-wght-normal.woff2",
+      weight: "200 800",
     },
   ],
 });
 
-const geistMono = localFont({
-  variable: "--font-geist-mono",
+const plexMono = localFont({
+  variable: "--font-plex-mono",
   display: "swap",
   src: [
     {
-      path: "../assets/fonts/geist-mono-latin-400-normal.woff2",
+      path: "../assets/fonts/ibm-plex-mono-latin-400-normal.woff2",
       weight: "400",
     },
     {
-      path: "../assets/fonts/geist-mono-latin-500-normal.woff2",
+      path: "../assets/fonts/ibm-plex-mono-latin-500-normal.woff2",
       weight: "500",
     },
     {
-      path: "../assets/fonts/geist-mono-latin-600-normal.woff2",
+      path: "../assets/fonts/ibm-plex-mono-latin-600-normal.woff2",
       weight: "600",
     },
   ],
@@ -55,7 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${interTight.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${manrope.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider
