@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GitBrag
 
-## Getting Started
+**Show off your open-source contributions.**
 
-First, run the development server:
+GitBrag turns any public GitHub profile into a shareable record of open-source work: merged pull requests to projects the user does not own, the repositories they shipped to, languages, activity over time, and ready-to-post share cards.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- No sign-in. GitBrag reads public data only, using a server-side token.
+- Rich link previews for X, LinkedIn, Facebook, Threads, Bluesky, WhatsApp, Reddit, Telegram and Slack.
+- Downloadable PNG cards in 1200×630, 1080×1080 and 1080×1920 (story) formats.
+- Live SVG badge for your README.
+- Deploys to Netlify or Vercel with one environment variable.
+
+## How contributions are counted
+
+A contribution is a **pull request authored by the user in a repository they do not own**.
+
+| Rule                                              | Behaviour                                                                    |
+| ------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Own repositories                                  | excluded                                                                     |
+| Forks                                             | excluded                                                                     |
+| Archived repositories                             | included                                                                     |
+| Repositories of organizations the user belongs to | included, with a one-click toggle to hide them                               |
+| States                                            | merged, open and closed are kept separate; merged drives the headline number |
+
+Data comes from the GitHub GraphQL API. Because GitHub search returns at most 1,000 results per query, heavy contributors are fetched in date ranges. Results are cached for one hour.
+
+## URLs
+
+| Path                                                        | Purpose                                                     |
+| ----------------------------------------------------------- | ----------------------------------------------------------- |
+| `/`                                                         | landing page with username search                           |
+| `/u/<login>`                                                | contribution profile                                        |
+| `/u/<login>?orgs=hide`                                      | profile without the user's own organizations                |
+| `/u/<login>/opengraph-image`                                | link-preview image (used automatically by social platforms) |
+| `/api/card/<login>.svg?theme=dark\|light`                   | README badge                                                |
+| `/api/card/<login>.png?format=og\|square\|story&download=1` | share card                                                  |
+
+Embed the badge in a README:
+
+```markdown
+[![Open-source contributions](https://gitbrag.netlify.app/api/card/<login>.svg)](https://gitbrag.netlify.app/u/<login>)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Self-hosting
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Requirements
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 20 or newer
+- A GitHub token. A fine-grained personal access token with **no** extra permissions is enough, since GitBrag only reads public data. Without a token GitHub allows 60 requests per hour, which is not enough for real use.
 
-## Learn More
+### Local development
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+git clone https://github.com/aldiidodi97/gitbrag.git
+cd gitbrag
+npm install
+cp .env.example .env.local   # then set GITHUB_TOKEN
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Netlify
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Import the repository in Netlify. The included `netlify.toml` uses `@netlify/plugin-nextjs`; no other build settings are needed.
+2. Add the environment variable `GITHUB_TOKEN`.
+3. Optionally set `NEXT_PUBLIC_SITE_URL` to your public URL (Netlify's `URL` is used otherwise).
 
-## Deploy on Vercel
+### Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Import the repository in Vercel. The Next.js preset is detected automatically.
+2. Add the environment variable `GITHUB_TOKEN`.
+3. `VERCEL_PROJECT_PRODUCTION_URL` is used for absolute URLs; set `NEXT_PUBLIC_SITE_URL` to override.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Environment variables
+
+| Variable               | Required | Description                                                                          |
+| ---------------------- | -------- | ------------------------------------------------------------------------------------ |
+| `GITHUB_TOKEN`         | yes      | Server-side token for the GitHub GraphQL API. Never exposed to the browser.          |
+| `NEXT_PUBLIC_SITE_URL` | no       | Public origin used in share links and metadata. Auto-detected on Netlify and Vercel. |
+
+## Scripts
+
+| Command             | Description                        |
+| ------------------- | ---------------------------------- |
+| `npm run dev`       | start the development server       |
+| `npm run build`     | production build                   |
+| `npm run lint`      | ESLint                             |
+| `npm run typecheck` | generate route types and run `tsc` |
+| `npm test`          | unit tests (Vitest)                |
+| `npm run format`    | format with Prettier               |
+
+## Tech
+
+Next.js (App Router), React, TypeScript, Tailwind CSS, Recharts, `next-themes`, `next/og` for generated images. No database.
+
+## Contributing
+
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+[MIT](LICENSE)
