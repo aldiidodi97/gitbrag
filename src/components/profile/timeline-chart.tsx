@@ -88,7 +88,7 @@ export function TimelineChart({ monthly }: { monthly: MonthBucket[] }) {
               axisLine={false}
             />
             <Tooltip
-              cursor={{ fill: "var(--accent-soft)" }}
+              cursor={{ fill: "var(--border)" }}
               contentStyle={{
                 background: "var(--card)",
                 border: "1px solid var(--border)",
