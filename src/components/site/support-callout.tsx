@@ -29,7 +29,7 @@ export function SupportCallout() {
             className="w-full min-w-44 justify-between gap-3 sm:w-auto"
           >
             <span>{link.label}</span>
-            <Image src={audienceIcons[link.icon]} alt="" className="size-5" />
+            <Image src={audienceIcons[link.icon]} alt="" className="size-6" />
             <span className="sr-only">{link.note}</span>
           </ButtonLink>
         ))}
