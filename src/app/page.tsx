@@ -24,8 +24,9 @@ export default function HomePage() {
               <span className="border-border text-foreground inline-flex items-center border px-3 py-1 font-mono text-xs tracking-[0.08em] uppercase md:text-sm">
                 Open-source bragging rights
               </span>
-              <h1 className="mt-4 max-w-2xl text-center text-[40px] leading-10 tracking-tighter text-balance lg:text-6xl xl:text-7xl xl:leading-16">
-                Show the work you shipped upstream
+              <h1 className="mt-4 max-w-3xl text-center text-4xl leading-9 tracking-tighter sm:text-5xl sm:leading-tight lg:text-6xl xl:text-7xl xl:leading-16">
+                <span className="block">Show the work</span>
+                <span className="block">you shipped upstream</span>
               </h1>
               <p className="text-muted-foreground mt-4 max-w-prose text-center text-sm tracking-tight text-balance lg:text-base">
                 GitBrag turns a GitHub username into a record of the pull
