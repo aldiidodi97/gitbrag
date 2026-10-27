@@ -7,8 +7,19 @@ export const siteConfig = {
   /** Real profile rendered on the landing page as the live example. */
   exampleLogin: "depapp",
   twitterHandle: "",
-  /** Where the "Support me" links point. */
-  supportUrl: "https://github.com/sponsors/depapp",
+  /** Where the "Support me" links point, one per audience. */
+  supportLinks: [
+    {
+      label: "Pamerin",
+      note: "Indonesia",
+      href: "https://pamerin.id/depapp/dukung",
+    },
+    {
+      label: "PayPal",
+      note: "International",
+      href: "https://www.paypal.me/depapp",
+    },
+  ],
 };
 
 export function getSiteUrl() {

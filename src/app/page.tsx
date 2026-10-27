@@ -46,15 +46,23 @@ export default function HomePage() {
               <span className="text-muted-foreground font-mono text-xs uppercase">
                 No sign-in. Public data only. MIT licensed.
               </span>
-              <a
-                href={siteConfig.supportUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-foreground hover:text-accent mt-3 inline-flex items-center gap-1.5 font-mono text-xs uppercase transition-colors"
-              >
+              <div className="text-foreground mt-3 inline-flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 font-mono text-xs uppercase">
                 <Image src={heart} alt="" className="size-4" />
-                Free and open source · Support me
-              </a>
+                <span>Free and open source · Support me via</span>
+                {siteConfig.supportLinks.map((link, i) => (
+                  <span key={link.href}>
+                    {i > 0 ? <span className="mr-1.5">or</span> : null}
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:text-accent underline underline-offset-4 transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </section>

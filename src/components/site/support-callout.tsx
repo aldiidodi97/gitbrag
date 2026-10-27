@@ -14,15 +14,23 @@ export function SupportCallout() {
           coffee.
         </p>
       </div>
-      <ButtonLink
-        href={siteConfig.supportUrl}
-        target="_blank"
-        rel="noreferrer"
-        variant="raised"
-        className="shrink-0"
-      >
-        Support me
-      </ButtonLink>
+      <div className="flex shrink-0 flex-col items-center gap-3 sm:items-end">
+        {siteConfig.supportLinks.map((link) => (
+          <ButtonLink
+            key={link.href}
+            href={link.href}
+            target="_blank"
+            rel="noreferrer"
+            variant="raised"
+            className="w-full min-w-44 justify-between gap-3 sm:w-auto"
+          >
+            <span>{link.label}</span>
+            <span className="font-mono text-[11px] font-normal uppercase opacity-80">
+              {link.note}
+            </span>
+          </ButtonLink>
+        ))}
+      </div>
     </section>
   );
 }
