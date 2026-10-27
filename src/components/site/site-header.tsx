@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ButtonLink } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site";
 import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
@@ -42,13 +41,6 @@ export function SiteHeader() {
                 GitHub
               </a>
               <ThemeToggle />
-              <ButtonLink
-                href="/#search"
-                size="sm"
-                className="hidden sm:inline-flex"
-              >
-                Get your card
-              </ButtonLink>
               <MobileMenu items={nav} />
             </div>
           </div>
