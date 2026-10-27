@@ -104,6 +104,8 @@ Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 The small 3D icons on profile pages come from Microsoft's [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) (MIT).
 
+The social-network logos in the share section come from [Simple Icons](https://simpleicons.org) (CC0).
+
 ## License
 
 [MIT](LICENSE)

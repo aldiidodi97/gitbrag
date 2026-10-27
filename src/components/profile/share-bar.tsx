@@ -3,6 +3,7 @@
 import { Check, Copy, Download, Link2, Share2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { BrandIcon, type Brand } from "@/components/profile/brand-icons";
 import { cn } from "@/lib/utils";
 
 interface ShareBarProps {
@@ -13,7 +14,10 @@ interface ShareBarProps {
   showCards?: boolean;
 }
 
-const networks = (url: string, text: string) => [
+const networks = (
+  url: string,
+  text: string,
+): { name: Brand; href: string }[] => [
   {
     name: "X",
     href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
@@ -82,25 +86,32 @@ export function ShareBar({
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap gap-2">
-        <Button onClick={nativeShare} size="sm">
-          <Share2 /> Share
-        </Button>
-        <Button variant="outline" size="sm" onClick={() => copy(url, "link")}>
-          {copied === "link" ? <Check /> : <Link2 />}{" "}
-          {copied === "link" ? "Copied" : "Copy link"}
-        </Button>
-        {networks(url, text).map((n) => (
-          <a
-            key={n.name}
-            href={n.href}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="border-border-strong bg-card hover:bg-muted inline-flex h-8 items-center rounded-md border px-3 text-xs font-medium"
-          >
-            {n.name}
-          </a>
-        ))}
+      <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-wrap justify-center gap-2">
+          <Button onClick={nativeShare} size="sm">
+            <Share2 /> Share
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => copy(url, "link")}>
+            {copied === "link" ? <Check /> : <Link2 />}{" "}
+            {copied === "link" ? "Copied" : "Copy link"}
+          </Button>
+        </div>
+        <ul className="flex flex-wrap justify-center gap-2">
+          {networks(url, text).map((n) => (
+            <li key={n.name}>
+              <a
+                href={n.href}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={`Share on ${n.name}`}
+                title={n.name}
+                className="border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground grid size-9 place-items-center rounded-md border transition-colors"
+              >
+                <BrandIcon name={n.name} className="size-4" />
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
       {showCards ? (
         <div className="grid gap-3 sm:grid-cols-3">
