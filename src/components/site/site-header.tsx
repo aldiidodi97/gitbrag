@@ -32,14 +32,6 @@ export function SiteHeader() {
               </nav>
             </div>
             <div className="flex items-center gap-2">
-              <a
-                href={siteConfig.repoUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-muted-foreground hover:text-foreground hidden px-2 text-sm font-medium transition-colors sm:inline-flex"
-              >
-                GitHub
-              </a>
               <ThemeToggle />
               <MobileMenu items={nav} />
             </div>
