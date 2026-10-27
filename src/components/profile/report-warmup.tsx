@@ -101,14 +101,14 @@ export function ReportWarmup({
         </div>
       </div>
       <div
-        className="bg-muted mt-5 h-2 w-full overflow-hidden rounded-full"
+        className="bg-muted mt-5 h-2 w-full overflow-hidden"
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={percent ?? undefined}
       >
         <div
-          className="bg-accent h-full rounded-full transition-all duration-700"
+          className="bg-accent h-full transition-all duration-700"
           style={{ width: `${percent ?? 8}%` }}
         />
       </div>

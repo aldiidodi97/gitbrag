@@ -4,23 +4,32 @@ import { ThemeProvider } from "next-themes";
 import { siteConfig, getSiteUrl } from "@/lib/site";
 import "./globals.css";
 
-const inter = localFont({
-  variable: "--font-inter",
-  display: "swap",
-  src: [
-    { path: "../assets/fonts/inter-latin-400-normal.woff", weight: "400" },
-    { path: "../assets/fonts/inter-latin-600-normal.woff", weight: "600" },
-    { path: "../assets/fonts/inter-latin-800-normal.woff", weight: "800" },
-  ],
-});
-
-const jetbrainsMono = localFont({
-  variable: "--font-jetbrains-mono",
+const interTight = localFont({
+  variable: "--font-inter-tight",
   display: "swap",
   src: [
     {
-      path: "../assets/fonts/jetbrains-mono-latin-500-normal.woff",
+      path: "../assets/fonts/inter-tight-latin-wght-normal.woff2",
+      weight: "100 900",
+    },
+  ],
+});
+
+const geistMono = localFont({
+  variable: "--font-geist-mono",
+  display: "swap",
+  src: [
+    {
+      path: "../assets/fonts/geist-mono-latin-400-normal.woff2",
+      weight: "400",
+    },
+    {
+      path: "../assets/fonts/geist-mono-latin-500-normal.woff2",
       weight: "500",
+    },
+    {
+      path: "../assets/fonts/geist-mono-latin-600-normal.woff2",
+      weight: "600",
     },
   ],
 });
@@ -46,7 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${interTight.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider

@@ -2,47 +2,56 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site";
 import { Logo } from "./logo";
+import { MobileMenu } from "./mobile-menu";
 import { ThemeToggle } from "./theme-toggle";
 
 const nav = [
-  { label: "What counts", href: "/#what-counts" },
-  { label: "Share cards", href: "/#share" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "Product", href: "/#product" },
+  { label: "How it works", href: "/#how-it-works" },
+  { label: "Share", href: "/#share" },
+  { label: "Example", href: `/u/${siteConfig.exampleLogin}` },
 ];
 
 export function SiteHeader() {
   return (
-    <header className="border-border bg-background sticky top-0 z-40 border-b">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 md:px-8">
-        <div className="flex items-center gap-8">
-          <Logo />
-          <nav className="text-muted-foreground hidden items-center gap-6 text-sm md:flex">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="hover:text-foreground"
+    <header className="border-border bg-background/85 sticky top-0 z-50 border-b backdrop-blur-md">
+      <div className="w-full px-4 sm:px-6">
+        <div className="border-border relative mx-auto w-full max-w-6xl border-x">
+          <div className="flex h-14 items-center justify-between pr-2 pl-4">
+            <div className="flex items-center gap-4">
+              <Logo />
+              <nav className="relative hidden items-center md:flex">
+                {nav.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="text-muted-foreground hover:text-foreground relative flex h-14 items-center px-3.5 text-sm font-medium transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+            <div className="flex items-center gap-2">
+              <a
+                href={siteConfig.repoUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-muted-foreground hover:text-foreground hidden px-2 text-sm font-medium transition-colors sm:inline-flex"
               >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-        <div className="flex items-center gap-2">
-          <ButtonLink
-            href={siteConfig.repoUrl}
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hidden sm:inline-flex"
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub
-          </ButtonLink>
-          <ThemeToggle />
-          <ButtonLink href="/#search" size="sm">
-            Look up a username
-          </ButtonLink>
+                GitHub
+              </a>
+              <ThemeToggle />
+              <ButtonLink
+                href="/#search"
+                size="sm"
+                className="hidden sm:inline-flex"
+              >
+                Get your card
+              </ButtonLink>
+              <MobileMenu items={nav} />
+            </div>
+          </div>
         </div>
       </div>
     </header>

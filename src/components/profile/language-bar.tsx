@@ -11,7 +11,7 @@ export function LanguageBar({ languages }: { languages: LanguageShare[] }) {
   const restShare = rest.reduce((s, l) => s + l.share, 0);
   return (
     <div className="flex flex-col gap-4">
-      <div className="bg-muted flex h-2 overflow-hidden rounded-full">
+      <div className="bg-muted flex h-2 overflow-hidden">
         {top.map((l) => (
           <span
             key={l.name}
