@@ -1,25 +1,20 @@
 import type { LanguageShare } from "@/lib/github/types";
 
 export function LanguageBar({ languages }: { languages: LanguageShare[] }) {
-  if (languages.length === 0) {
-    return (
-      <p className="text-muted-foreground text-sm">No language data yet.</p>
-    );
-  }
+  if (languages.length === 0) return null;
   const top = languages.slice(0, 6);
   const rest = languages.slice(6);
   const restShare = rest.reduce((s, l) => s + l.share, 0);
+  const color = (l: LanguageShare) =>
+    l.color ?? "var(--color-muted-foreground)";
   return (
-    <div className="flex flex-col gap-4">
-      <div className="bg-muted flex h-2 overflow-hidden">
+    <div className="border-border flex flex-col gap-3 border-b pb-6">
+      <div className="bg-muted flex h-3 overflow-hidden rounded-full">
         {top.map((l) => (
           <span
             key={l.name}
             title={`${l.name} ${(l.share * 100).toFixed(0)}%`}
-            style={{
-              width: `${l.share * 100}%`,
-              background: l.color ?? "var(--color-muted-foreground)",
-            }}
+            style={{ width: `${l.share * 100}%`, background: color(l) }}
           />
         ))}
         {restShare > 0 ? (
@@ -31,29 +26,25 @@ export function LanguageBar({ languages }: { languages: LanguageShare[] }) {
           />
         ) : null}
       </div>
-      <ul className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
+      <ul className="flex flex-wrap gap-2">
         {top.map((l) => (
-          <li key={l.name} className="flex items-center justify-between gap-2">
-            <span className="flex min-w-0 items-center gap-2">
-              <span
-                className="size-2 shrink-0 rounded-full"
-                style={{
-                  background: l.color ?? "var(--color-muted-foreground)",
-                }}
-              />
-              <span className="truncate">{l.name}</span>
-            </span>
+          <li
+            key={l.name}
+            className="border-border bg-card inline-flex items-center gap-2 rounded-full border py-1 pr-3 pl-2 text-sm"
+          >
+            <span
+              className="size-2.5 rounded-full"
+              style={{ background: color(l) }}
+            />
+            {l.name}
             <span className="tabular text-muted-foreground font-mono text-xs">
               {(l.share * 100).toFixed(0)}%
             </span>
           </li>
         ))}
         {rest.length > 0 ? (
-          <li className="text-muted-foreground flex items-center justify-between gap-2">
-            <span>+{rest.length} more</span>
-            <span className="tabular font-mono text-xs">
-              {(restShare * 100).toFixed(0)}%
-            </span>
+          <li className="text-muted-foreground inline-flex items-center py-1 pl-1 text-sm">
+            +{rest.length} more · {(restShare * 100).toFixed(0)}%
           </li>
         ) : null}
       </ul>

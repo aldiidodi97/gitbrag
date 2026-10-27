@@ -12,7 +12,7 @@ import { LanguageBar } from "@/components/profile/language-bar";
 import { ReportWarmup } from "@/components/profile/report-warmup";
 import { PullRequestList } from "@/components/profile/pr-list";
 import { ProjectRanking } from "@/components/profile/project-ranking";
-import { ShareBar } from "@/components/profile/share-bar";
+import { ShareSection } from "@/components/profile/share-section";
 import { TimelineChart } from "@/components/profile/timeline-chart";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SupportCallout } from "@/components/site/support-callout";
@@ -308,6 +308,9 @@ async function Report({
           </div>
         ))}
       </dl>
+      <div className="mt-6">
+        <LanguageBar languages={stats.languages} />
+      </div>
 
       <section className="mt-12">
         <ProjectRanking repos={stats.topRepositories} />
@@ -317,21 +320,12 @@ async function Report({
         <TimelineChart monthly={stats.monthly} />
       </section>
 
-      <section className="mt-14 grid gap-10 lg:grid-cols-5 lg:gap-14">
-        <div className="min-w-0 lg:col-span-2">
-          <span className="label mb-4 block">Languages</span>
-          <LanguageBar languages={stats.languages} />
-        </div>
-        <div id="share" className="min-w-0 scroll-mt-20 lg:col-span-3">
-          <span className="label mb-4 block">Share</span>
-          <ShareBar
-            url={url}
-            login={user.login}
-            text={shareText}
-            cardBase={cardBase}
-          />
-        </div>
-      </section>
+      <ShareSection
+        url={url}
+        login={user.login}
+        text={shareText}
+        cardBase={cardBase}
+      />
 
       <section className="mt-14">
         <div className="mb-4">
