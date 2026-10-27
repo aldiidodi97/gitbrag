@@ -70,6 +70,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   const title = `${name}'s open-source contributions`;
   return {
+    metadataBase: new URL(await requestSiteUrl()),
     title: `${name} (@${user.login}) — open-source contributions`,
     description,
     alternates: { canonical: `/u/${user.login}` },
