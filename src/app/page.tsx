@@ -24,7 +24,7 @@ export default function HomePage() {
               <span className="border-border text-foreground inline-flex items-center border px-3 py-1 font-mono text-xs tracking-[0.08em] uppercase md:text-sm">
                 Open-source bragging rights
               </span>
-              <h1 className="mt-4 max-w-3xl text-center text-4xl leading-9 tracking-tighter sm:text-5xl sm:leading-tight lg:text-6xl xl:text-7xl xl:leading-16">
+              <h1 className="mt-4 max-w-3xl text-center text-[2rem] leading-9 tracking-tighter sm:text-5xl sm:leading-tight lg:text-6xl xl:text-7xl xl:leading-16">
                 <span className="block">Show the work</span>
                 <span className="block">you shipped upstream</span>
               </h1>
