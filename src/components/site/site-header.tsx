@@ -49,12 +49,6 @@ export function SiteHeader({ current = "/" }: { current?: string }) {
         </nav>
         <div className="flex flex-1 items-center justify-end gap-2">
           <ThemeToggle />
-          <Link
-            href="/#search"
-            className="bg-accent text-accent-fg hover:bg-accent/90 hidden h-9 items-center px-4 font-mono text-xs tracking-[0.08em] uppercase transition-colors sm:inline-flex md:h-10"
-          >
-            Get your card
-          </Link>
           <MobileMenu items={nav} />
         </div>
       </div>

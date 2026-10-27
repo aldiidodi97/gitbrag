@@ -1,27 +1,16 @@
-import { Suspense } from "react";
-import { Halftone } from "@/components/landing/halftone";
 import { UserSearch } from "@/components/search/user-search";
 import { SiteHeader } from "@/components/site/site-header";
 
 export const dynamic = "force-dynamic";
-
-function Strip() {
-  return (
-    <div className="w-full px-2">
-      <div className="bg-hatch border-border relative mx-auto h-8 w-full max-w-6xl border-x md:h-10" />
-    </div>
-  );
-}
 
 export default function HomePage() {
   return (
     <>
       <SiteHeader current="/" />
       <main className="flex min-h-[calc(100vh-96px)] flex-col md:min-h-[calc(100vh-112px)]">
-        <Strip />
         <section className="flex flex-1 flex-col px-2">
           <div className="border-border relative mx-auto flex w-full max-w-6xl flex-1 flex-col items-center border-x">
-            <div className="flex w-full flex-col items-center px-4 pt-20">
+            <div className="flex w-full flex-col items-center px-4 py-20 md:py-28">
               <span className="border-border text-foreground inline-flex items-center gap-2 border px-3 py-1 font-mono text-xs tracking-[0.08em] uppercase md:text-sm">
                 <span className="bg-accent size-2 md:size-2.5" />
                 Open-source bragging rights
@@ -45,12 +34,8 @@ export default function HomePage() {
                 No sign-in. Public data only. MIT licensed.
               </span>
             </div>
-            <Suspense>
-              <Halftone />
-            </Suspense>
           </div>
         </section>
-        <Strip />
       </main>
       <footer className="border-border bg-background border-t px-2 pb-2">
         <div className="border-border text-foreground mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 border-x px-4 py-4 font-mono text-xs uppercase md:text-sm lg:h-16 lg:flex-row lg:py-0">
