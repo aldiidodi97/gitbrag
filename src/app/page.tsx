@@ -48,7 +48,17 @@ export default function HomePage() {
               </span>
               <div className="text-foreground mt-3 inline-flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 font-mono text-xs uppercase">
                 <Image src={heart} alt="" className="size-4" />
-                <span>Free and open source · Support me via</span>
+                <span>
+                  <a
+                    href={siteConfig.repoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-accent underline underline-offset-4 transition-colors"
+                  >
+                    Free and open source
+                  </a>{" "}
+                  · Support me via
+                </span>
                 {siteConfig.supportLinks.map((link, i) => (
                   <span key={link.href}>
                     {i > 0 ? <span className="mr-1.5">or</span> : null}
