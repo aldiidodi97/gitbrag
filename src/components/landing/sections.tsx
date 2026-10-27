@@ -7,7 +7,6 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { formatCompact, formatNumber } from "@/lib/utils";
 import { siteConfig } from "@/lib/site";
