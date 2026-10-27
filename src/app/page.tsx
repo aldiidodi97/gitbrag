@@ -4,7 +4,6 @@ import { LiveDashboard } from "@/components/landing/live-dashboard";
 import {
   Cta,
   HowItWorks,
-  Marquee,
   ProductGrid,
   ShareCarousel,
   StatsStrip,
@@ -87,7 +86,6 @@ export default function HomePage() {
               </Suspense>
             </section>
 
-            <Marquee />
             <ProductGrid />
             <Suspense>
               <HowItWorks />

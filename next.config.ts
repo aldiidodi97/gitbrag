@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
-      { protocol: "https", hostname: "github.com", pathname: "/*.png" },
     ],
   },
   turbopack: {

@@ -23,53 +23,6 @@ export function Eyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
-const marquee = [
-  "torvalds",
-  "sindresorhus",
-  "gaearon",
-  "tj",
-  "antfu",
-  "kentcdodds",
-  "yyx990803",
-  "addyosmani",
-  "mitchellh",
-  "feross",
-];
-
-export function Marquee() {
-  return (
-    <section
-      id="customers"
-      className="border-border w-full border-b px-6 py-8 sm:px-10"
-    >
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <p className="text-muted-foreground font-mono text-[11px] tracking-[0.16em] uppercase">
-          Profiles people look up on GitBrag
-        </p>
-        <ul className="flex flex-wrap gap-2">
-          {marquee.map((login) => (
-            <li key={login}>
-              <Link
-                href={`/u/${login}`}
-                className="border-border bg-card text-foreground hover:border-border-strong hover:text-accent inline-flex h-9 items-center gap-2 rounded-md border pr-3 pl-1.5 text-sm font-medium transition-colors"
-              >
-                <Image
-                  src={`https://github.com/${login}.png?size=48`}
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="size-6 rounded-sm"
-                />
-                {login}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
 const features = [
   {
     id: "F-01",
