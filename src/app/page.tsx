@@ -37,8 +37,8 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-      <footer className="border-border bg-background border-t px-2 pb-2">
-        <div className="border-border text-foreground mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 border-x px-4 py-4 font-mono text-xs uppercase md:text-sm lg:h-16 lg:flex-row lg:py-0">
+      <footer className="bg-background px-2 pb-2">
+        <div className="border-border text-foreground mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 border-x border-t px-4 py-4 font-mono text-xs uppercase md:text-sm lg:h-16 lg:flex-row lg:py-0">
           <span>© {new Date().getFullYear()} GitBrag. MIT licensed.</span>
           <span>Not affiliated with GitHub</span>
         </div>
