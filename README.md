@@ -22,7 +22,9 @@ A contribution is a **pull request authored by the user in a repository they do 
 | Repositories of organizations the user belongs to | included, with a one-click toggle to hide them                               |
 | States                                            | merged, open and closed are kept separate; merged drives the headline number |
 
-Data comes from the GitHub GraphQL API. Because GitHub search returns at most 1,000 results per query, heavy contributors are fetched in date ranges. Results are cached for one hour.
+Data comes from the GitHub GraphQL API. Because GitHub search returns at most 1,000 results per query, heavy contributors are fetched year by year, in parallel.
+
+Every GitHub response is cached for one hour, and a report is assembled in short time slices so it fits within serverless function limits (10 s on Netlify's and Vercel's free tiers). The first visit to an active contributor's profile shows a progress state while the page polls `/api/report/<login>`; each poll fetches more pages, and once everything is cached the full profile (and its share images) render instantly for the next hour.
 
 ## URLs
 

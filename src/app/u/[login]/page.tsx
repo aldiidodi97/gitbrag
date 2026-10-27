@@ -14,6 +14,7 @@ import { Suspense, type ReactNode } from "react";
 import { KpiCard, Sparkline } from "@/components/profile/kpi-card";
 import { LanguageBar } from "@/components/profile/language-bar";
 import { ProfileHeader } from "@/components/profile/profile-header";
+import { ReportWarmup } from "@/components/profile/report-warmup";
 import { PullRequestList } from "@/components/profile/pr-list";
 import { RepoGrid } from "@/components/profile/repo-grid";
 import { ShareBar } from "@/components/profile/share-bar";
@@ -26,13 +27,14 @@ import { ButtonLink } from "@/components/ui/button";
 import {
   GitHubError,
   compactPullRequests,
-  getContributionReport,
+  loadReport,
   getUser,
   hasGitHubToken,
   type GitHubUser,
 } from "@/lib/github";
 import { computeStats } from "@/lib/github/stats";
-import { getSiteUrl, profileUrl, siteConfig } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
+import { requestProfileUrl, requestSiteUrl } from "@/lib/site-request";
 import {
   cn,
   formatCompact,
@@ -58,8 +60,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const name = user.name ?? user.login;
   let description = `${name}'s open-source contributions: merged pull requests, projects and languages, on ${siteConfig.name}.`;
   try {
-    const { stats } = await getContributionReport(login);
-    description = `${formatNumber(stats.merged)} merged pull requests across ${formatNumber(stats.repositories)} open-source projects reaching ${formatCompact(stats.totalStars)} stars.`;
+    const result = await loadReport(login);
+    if (result.status === "ready") {
+      const { stats } = result.report;
+      description = `${formatNumber(stats.merged)} merged pull requests across ${formatNumber(stats.repositories)} open-source projects reaching ${formatCompact(stats.totalStars)} stars.`;
+    }
   } catch {
     /* keep the generic description; the page shows the error */
   }
@@ -110,15 +115,23 @@ async function Report({
   login: string;
   hideOrgs: boolean;
 }) {
-  const report = await getContributionReport(login);
+  const result = await loadReport(login);
+  if (result.status === "pending") {
+    return (
+      <div className="mt-10">
+        <ReportWarmup login={login} initial={result.progress} />
+      </div>
+    );
+  }
+  const { report } = result;
   const { user } = report;
   const pullRequests = hideOrgs
     ? report.pullRequests.filter((pr) => !pr.inUserOrg)
     : report.pullRequests;
   const stats = hideOrgs ? computeStats(pullRequests) : report.stats;
   const orgPrCount = report.pullRequests.filter((pr) => pr.inUserOrg).length;
-  const url = profileUrl(user.login);
-  const cardBase = `${getSiteUrl()}/api/card/${encodeURIComponent(user.login)}`;
+  const url = await requestProfileUrl(user.login);
+  const cardBase = `${await requestSiteUrl()}/api/card/${encodeURIComponent(user.login)}`;
   const shareText = `${user.name ?? user.login} has ${formatNumber(stats.merged)} merged pull requests across ${formatNumber(stats.repositories)} open-source projects. See the full record on ${siteConfig.name}:`;
   const last12 = stats.monthly.slice(-12).map((m) => m.merged);
   const mergedLast12 = last12.reduce((a, b) => a + b, 0);
@@ -240,16 +253,14 @@ async function Report({
           <LanguageBar languages={stats.languages} />
           <div className="border-border mt-auto grid grid-cols-2 gap-3 border-t pt-4 font-mono text-[11px]">
             <div>
-              <div className="text-muted-foreground">Lines added</div>
+              <div className="text-muted-foreground">Merge rate</div>
               <div className="tabular text-positive">
-                +{formatCompact(stats.additions)}
+                {Math.round(stats.mergeRate * 100)}%
               </div>
             </div>
             <div>
-              <div className="text-muted-foreground">Lines removed</div>
-              <div className="tabular text-negative">
-                −{formatCompact(stats.deletions)}
-              </div>
+              <div className="text-muted-foreground">Open right now</div>
+              <div className="tabular">{formatCompact(stats.open)}</div>
             </div>
           </div>
         </div>

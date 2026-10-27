@@ -1,4 +1,4 @@
-import type { ContributionReport } from "@/lib/github/types";
+import type { ContributionReport, GitHubUser } from "@/lib/github/types";
 import { formatCompact } from "@/lib/utils";
 
 export type CardFormat = "og" | "square" | "story";
@@ -378,6 +378,71 @@ export function ShareCard({
         >
           {Math.round(stats.mergeRate * 100)}% MERGE RATE
         </span>
+      </div>
+    </div>
+  );
+}
+
+/** Shown while a profile's report is still being built; never cached. */
+export function PendingCard({
+  user,
+  format,
+  siteHost,
+}: {
+  user: GitHubUser;
+  format: CardFormat;
+  siteHost: string;
+}) {
+  const { width, height } = CARD_SIZES[format];
+  const scale = format === "story" ? 1.35 : format === "square" ? 1.15 : 1;
+  const px = (n: number) => Math.round(n * scale);
+  return (
+    <div
+      style={{
+        width,
+        height,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: BG,
+        color: "white",
+        fontFamily: "Inter",
+        gap: px(20),
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={user.avatarUrl}
+        alt=""
+        width={px(112)}
+        height={px(112)}
+        style={{ borderRadius: px(24), border: `2px solid ${BORDER}` }}
+      />
+      <div style={{ display: "flex", fontSize: px(44), fontWeight: 800 }}>
+        {user.name ?? user.login}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          fontFamily: "JetBrains Mono",
+          fontSize: px(20),
+          color: MUTED,
+        }}
+      >
+        @{user.login} · OPEN-SOURCE CONTRIBUTIONS
+      </div>
+      <div
+        style={{
+          display: "flex",
+          marginTop: px(16),
+          fontSize: px(18),
+          color: BLUE,
+          fontFamily: "JetBrains Mono",
+          letterSpacing: 1,
+        }}
+      >
+        {siteHost.toUpperCase()}/U/{user.login.toUpperCase()}
       </div>
     </div>
   );

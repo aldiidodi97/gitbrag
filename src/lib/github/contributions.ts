@@ -1,4 +1,6 @@
-import { GitHubError, githubGraphQL } from "./client";
+import { assertBudget, reportFetched, reportTotal } from "./budget";
+import { GitHubError } from "./client";
+import { cachedGraphQL } from "./cached";
 import {
   PULL_REQUEST_COUNT_QUERY,
   PULL_REQUEST_SEARCH_QUERY,
@@ -44,8 +46,6 @@ interface SearchNode {
   createdAt: string;
   mergedAt: string | null;
   closedAt: string | null;
-  additions: number;
-  deletions: number;
   repository: {
     nameWithOwner: string;
     name: string;
@@ -85,7 +85,7 @@ export function normalizeLogin(raw: string) {
 }
 
 export async function fetchUser(login: string): Promise<GitHubUser> {
-  const data = await githubGraphQL<UserQueryResult>(USER_QUERY, { login });
+  const data = await cachedGraphQL<UserQueryResult>(USER_QUERY, { login });
   if (!data.user) {
     throw new GitHubError(
       `GitHub user "${login}" was not found.`,
@@ -128,11 +128,14 @@ async function fetchAllPages(q: string): Promise<SearchNode[]> {
   const nodes: SearchNode[] = [];
   let after: string | null = null;
   for (let page = 0; page < SEARCH_RESULT_LIMIT / PAGE_SIZE; page++) {
-    const data: SearchQueryResult = await githubGraphQL<SearchQueryResult>(
+    assertBudget();
+    const data: SearchQueryResult = await cachedGraphQL<SearchQueryResult>(
       PULL_REQUEST_SEARCH_QUERY,
       { q, after },
     );
-    nodes.push(...data.search.nodes.filter(isPullRequestNode));
+    const pageNodes = data.search.nodes.filter(isPullRequestNode);
+    nodes.push(...pageNodes);
+    reportFetched(pageNodes.length);
     if (!data.search.pageInfo.hasNextPage || !data.search.pageInfo.endCursor)
       break;
     after = data.search.pageInfo.endCursor;
@@ -141,7 +144,8 @@ async function fetchAllPages(q: string): Promise<SearchNode[]> {
 }
 
 async function countResults(q: string) {
-  const data = await githubGraphQL<CountQueryResult>(PULL_REQUEST_COUNT_QUERY, {
+  assertBudget();
+  const data = await cachedGraphQL<CountQueryResult>(PULL_REQUEST_COUNT_QUERY, {
     q,
   });
   return data.search.issueCount;
@@ -223,6 +227,7 @@ export async function fetchPullRequests(
 ): Promise<{ pullRequests: PullRequest[]; truncated: boolean }> {
   const base = baseSearchQuery(user.login);
   const total = await countResults(base);
+  reportTotal(Math.min(total, MAX_PULL_REQUESTS));
 
   let nodes: SearchNode[];
   let truncated = false;
@@ -267,8 +272,6 @@ export async function fetchPullRequests(
       createdAt: node.createdAt,
       mergedAt: node.mergedAt,
       closedAt: node.closedAt,
-      additions: node.additions,
-      deletions: node.deletions,
       inUserOrg: orgs.has(owner.toLowerCase()),
       repo: {
         nameWithOwner: node.repository.nameWithOwner,

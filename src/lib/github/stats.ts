@@ -23,8 +23,6 @@ export function summarizeRepositories(prs: PullRequest[]): RepoSummary[] {
     if (existing) {
       existing.pullRequests += 1;
       existing.merged += pr.state === "MERGED" ? 1 : 0;
-      existing.additions += pr.additions;
-      existing.deletions += pr.deletions;
       if (pr.createdAt < existing.firstContribution) {
         existing.firstContribution = pr.createdAt;
       }
@@ -36,8 +34,6 @@ export function summarizeRepositories(prs: PullRequest[]): RepoSummary[] {
         ...pr.repo,
         pullRequests: 1,
         merged: pr.state === "MERGED" ? 1 : 0,
-        additions: pr.additions,
-        deletions: pr.deletions,
         firstContribution: pr.createdAt,
         lastContribution: pr.createdAt,
       });
@@ -148,8 +144,6 @@ export function computeStats(prs: PullRequest[]): ContributionStats {
     repositories: repos.length,
     organizations: new Set(repos.map((r) => r.owner)).size,
     totalStars: repos.reduce((sum, r) => sum + r.stars, 0),
-    additions: prs.reduce((sum, p) => sum + p.additions, 0),
-    deletions: prs.reduce((sum, p) => sum + p.deletions, 0),
     firstContribution: first,
     lastContribution: last,
     yearsActive,

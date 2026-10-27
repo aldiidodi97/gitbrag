@@ -5,10 +5,10 @@ import { renderBadgeSvg } from "@/lib/cards/badge-svg";
 import { CARD_SIZES, parseCardFormat, ShareCard } from "@/lib/cards/share-card";
 import {
   GitHubError,
-  getContributionReport,
+  loadReport,
   REPORT_REVALIDATE_SECONDS,
 } from "@/lib/github";
-import { getSiteUrl } from "@/lib/site";
+import { requestSiteUrl } from "@/lib/site-request";
 
 const cacheHeader = `public, s-maxage=${REPORT_REVALIDATE_SECONDS}, stale-while-revalidate=${REPORT_REVALIDATE_SECONDS}`;
 
@@ -28,7 +28,21 @@ export async function GET(
 
   let report;
   try {
-    report = await getContributionReport(login);
+    const result = await loadReport(login);
+    if (result.status === "pending") {
+      return NextResponse.json(
+        {
+          status: "pending",
+          ...result.progress,
+          message: `Report for ${login} is still being built. Open the profile page and try again.`,
+        },
+        {
+          status: 503,
+          headers: { "Cache-Control": "no-store", "Retry-After": "10" },
+        },
+      );
+    }
+    report = result.report;
   } catch (error) {
     if (error instanceof GitHubError) {
       return NextResponse.json(
@@ -56,7 +70,7 @@ export async function GET(
 
   const format = parseCardFormat(searchParams.get("format"));
   const fonts = await loadCardFonts();
-  const siteHost = new URL(getSiteUrl()).host;
+  const siteHost = new URL(await requestSiteUrl()).host;
   const image = new ImageResponse(
     <ShareCard report={report} format={format} siteHost={siteHost} />,
     {

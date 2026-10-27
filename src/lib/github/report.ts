@@ -1,56 +1,48 @@
-import { unstable_cache } from "next/cache";
 import { cache } from "react";
-import { expandReport, toCompactReport, type CompactReport } from "./compact";
+import { BudgetExceededError, withBudget, type ReportProgress } from "./budget";
+import { CACHE_SECONDS } from "./cached";
+import { expandReport, toCompactReport } from "./compact";
 import { fetchPullRequests, fetchUser, normalizeLogin } from "./contributions";
 import type { ContributionReport, GitHubUser } from "./types";
 
-export const REPORT_REVALIDATE_SECONDS = 60 * 60;
+export const REPORT_REVALIDATE_SECONDS = CACHE_SECONDS;
 
-async function buildReport(login: string): Promise<CompactReport> {
-  const user = await fetchUser(login);
-  const { pullRequests, truncated } = await fetchPullRequests(user);
-  return toCompactReport(user, pullRequests, truncated);
-}
+/** Default time slice for building a report inside one request. */
+export const DEFAULT_BUDGET_MS = 5_000;
 
-/**
- * `unstable_cache` derives its key from the callback's source code. Bundlers
- * emit different import bindings for pages, route handlers and OG images, so a
- * callback that references imports directly would get one cache entry per
- * layer. Routing through `globalThis` keeps the callback source identical and
- * the cache shared.
- */
-declare global {
-  var __gitbragBuilders:
-    { report: typeof buildReport; user: typeof fetchUser } | undefined;
-}
-globalThis.__gitbragBuilders = { report: buildReport, user: fetchUser };
-
-/** Cached in a compact form so even very active contributors stay under the cache size limit. */
-const cachedReport = unstable_cache(
-  async (login: string) => globalThis.__gitbragBuilders!.report(login),
-  ["contribution-report", "v1"],
-  { revalidate: REPORT_REVALIDATE_SECONDS, tags: ["contribution-report"] },
-);
-
-const cachedUser = unstable_cache(
-  async (login: string) => globalThis.__gitbragBuilders!.user(login),
-  ["github-user", "v1"],
-  { revalidate: REPORT_REVALIDATE_SECONDS, tags: ["github-user"] },
-);
-
-/** Profile only: fast, used to render the page header before pull requests arrive. */
+/** Profile only: one cached GitHub call, used to render the page header first. */
 export const getUser = cache(async (rawLogin: string): Promise<GitHubUser> => {
-  return cachedUser(normalizeLogin(rawLogin).toLowerCase());
+  return fetchUser(normalizeLogin(rawLogin).toLowerCase());
 });
 
+export type ReportResult =
+  | { status: "ready"; report: ContributionReport }
+  | { status: "pending"; progress: ReportProgress };
+
 /**
- * Loads a user's contribution report. Cached per login for one hour so that
- * repeat visits and shared links do not hit the GitHub API again. Deduplicated
- * per request so `generateMetadata`, the page and the OG image share one load.
+ * Builds a user's contribution report from cached GitHub pages. Every GitHub
+ * response is cached for an hour, so repeat visits and share images cost no
+ * API calls, and a build interrupted by `budgetMs` resumes on the next call.
+ * Deduplicated per request so `generateMetadata` and the page share one load.
  */
-export const getContributionReport = cache(
-  async (rawLogin: string): Promise<ContributionReport> => {
+export const loadReport = cache(
+  async (
+    rawLogin: string,
+    budgetMs = DEFAULT_BUDGET_MS,
+  ): Promise<ReportResult> => {
     const login = normalizeLogin(rawLogin).toLowerCase();
-    return expandReport(await cachedReport(login));
+    try {
+      const report = await withBudget(budgetMs, async () => {
+        const user = await fetchUser(login);
+        const { pullRequests, truncated } = await fetchPullRequests(user);
+        return expandReport(toCompactReport(user, pullRequests, truncated));
+      });
+      return { status: "ready", report };
+    } catch (error) {
+      if (error instanceof BudgetExceededError) {
+        return { status: "pending", progress: error.progress };
+      }
+      throw error;
+    }
   },
 );
