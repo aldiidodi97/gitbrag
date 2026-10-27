@@ -1,4 +1,5 @@
 import Image from "next/image";
+import logo from "@/assets/logo.png";
 import { UserSearch } from "@/components/search/user-search";
 import { SiteHeader } from "@/components/site/site-header";
 
@@ -13,7 +14,7 @@ export default function HomePage() {
           <div className="border-border relative mx-auto flex w-full max-w-6xl flex-1 flex-col items-center border-x">
             <div className="flex w-full flex-col items-center px-4 py-20 md:py-28">
               <Image
-                src="/logo.png"
+                src={logo}
                 alt="GitBrag"
                 width={96}
                 height={96}

@@ -1,4 +1,4 @@
-<p align="center"><img src="public/logo.png" alt="GitBrag" width="120"></p>
+<p align="center"><img src="src/assets/logo.png" alt="GitBrag" width="120"></p>
 
 # GitBrag
 

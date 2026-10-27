@@ -1,4 +1,5 @@
 import Image from "next/image";
+import logo from "@/assets/logo.png";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -6,7 +7,7 @@ export function Logo({ className }: { className?: string }) {
   return (
     <Link href="/" className={cn("flex items-center gap-2", className)}>
       <Image
-        src="/logo.png"
+        src={logo}
         alt=""
         aria-hidden
         width={28}
