@@ -1,4 +1,4 @@
-<p align="center"><img src="public/logo.png" alt="GitBrag" width="120"></p>
+<p align="center"><img src="src/assets/logo.png" alt="GitBrag" width="120"></p>
 
 # GitBrag
 
@@ -10,23 +10,25 @@ GitBrag turns any public GitHub profile into a shareable record of open-source w
 - Rich link previews for X, LinkedIn, Facebook, Threads, Bluesky, WhatsApp, Reddit, Telegram and Slack.
 - Downloadable PNG cards in 1200×630, 1080×1080 and 1080×1920 (story) formats.
 - Live SVG badge for your README.
-- Deploys to Netlify or Vercel with one environment variable.
+- Deploys to Netlify with one environment variable.
 
 ## How contributions are counted
 
 A contribution is a **pull request authored by the user in a repository they do not own**.
 
-| Rule                                              | Behaviour                                                                    |
-| ------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Own repositories                                  | excluded                                                                     |
-| Forks                                             | excluded                                                                     |
-| Archived repositories                             | included                                                                     |
-| Repositories of organizations the user belongs to | included, with a one-click toggle to hide them                               |
-| States                                            | merged, open and closed are kept separate; merged drives the headline number |
+| Rule                                              | Behaviour                                                                          |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Own repositories                                  | excluded                                                                           |
+| Forks                                             | excluded                                                                           |
+| Archived repositories                             | included                                                                           |
+| Repositories of organizations the user belongs to | included, with a one-click toggle to hide them                                     |
+| States                                            | merged, open and closed are kept separate; merged drives the headline number       |
+| Projects                                          | a repository counts (and adds its stars) only once a pull request there was merged |
+| Languages, years active                           | computed from merged pull requests only                                            |
 
 Data comes from the GitHub GraphQL API. Because GitHub search returns at most 1,000 results per query, heavy contributors are fetched year by year, in parallel.
 
-Every GitHub response is cached for one hour, and a report is assembled in short time slices so it fits within serverless function limits (10 s on Netlify's and Vercel's free tiers). The first visit to an active contributor's profile shows a progress state while the page polls `/api/report/<login>`; each poll fetches more pages, and once everything is cached the full profile (and its share images) render instantly for the next hour.
+Every GitHub response is cached for one hour, and a report is assembled in short time slices so it fits within serverless function limits (10 s on Netlify's free tier). The first visit to an active contributor's profile shows a progress state while the page polls `/api/report/<login>`; each poll fetches more pages, and once everything is cached the full profile (and its share images) render instantly for the next hour.
 
 ## URLs
 
@@ -68,18 +70,12 @@ npm run dev
 2. Add the environment variable `GITHUB_TOKEN`.
 3. Optionally set `NEXT_PUBLIC_SITE_URL` to your public URL (Netlify's `URL` is used otherwise).
 
-### Vercel
-
-1. Import the repository in Vercel. The Next.js preset is detected automatically.
-2. Add the environment variable `GITHUB_TOKEN`.
-3. `VERCEL_PROJECT_PRODUCTION_URL` is used for absolute URLs; set `NEXT_PUBLIC_SITE_URL` to override.
-
 ### Environment variables
 
-| Variable               | Required | Description                                                                          |
-| ---------------------- | -------- | ------------------------------------------------------------------------------------ |
-| `GITHUB_TOKEN`         | yes      | Server-side token for the GitHub GraphQL API. Never exposed to the browser.          |
-| `NEXT_PUBLIC_SITE_URL` | no       | Public origin used in share links and metadata. Auto-detected on Netlify and Vercel. |
+| Variable               | Required | Description                                                                 |
+| ---------------------- | -------- | --------------------------------------------------------------------------- |
+| `GITHUB_TOKEN`         | yes      | Server-side token for the GitHub GraphQL API. Never exposed to the browser. |
+| `NEXT_PUBLIC_SITE_URL` | no       | Public origin used in share links and metadata. Auto-detected on Netlify.   |
 
 ## Scripts
 
@@ -99,6 +95,12 @@ Next.js (App Router), React, TypeScript, Tailwind CSS, Recharts, `next-themes`, 
 ## Contributing
 
 Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Credits
+
+The small 3D icons on profile pages come from Microsoft's [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) (MIT).
+
+The social-network logos in the share section come from [Simple Icons](https://simpleicons.org) (CC0).
 
 ## License
 

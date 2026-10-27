@@ -13,7 +13,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@fontsource-variable/manrope": "^5.2.6",
+    "@fontsource-variable/plus-jakarta-sans": "^5.2.6",
     "@fontsource/ibm-plex-mono": "^5.2.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -23,6 +23,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "recharts": "^3.10.1",
+    "simple-icons": "^16.36.0",
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {

@@ -39,13 +39,15 @@ export function summarizeRepositories(prs: PullRequest[]): RepoSummary[] {
       });
     }
   }
-  return [...byRepo.values()].sort(
-    (a, b) =>
-      b.merged - a.merged ||
-      b.pullRequests - a.pullRequests ||
-      b.stars - a.stars ||
-      a.nameWithOwner.localeCompare(b.nameWithOwner),
-  );
+  return [...byRepo.values()]
+    .filter((repo) => repo.merged > 0)
+    .sort(
+      (a, b) =>
+        b.merged - a.merged ||
+        b.pullRequests - a.pullRequests ||
+        b.stars - a.stars ||
+        a.nameWithOwner.localeCompare(b.nameWithOwner),
+    );
 }
 
 export function summarizeLanguages(prs: PullRequest[]): LanguageShare[] {
@@ -116,12 +118,13 @@ export function bucketByYear(monthly: MonthBucket[]): YearBucket[] {
 }
 
 export function computeStats(prs: PullRequest[]): ContributionStats {
-  const merged = prs.filter((p) => p.state === "MERGED").length;
+  const mergedPrs = prs.filter((p) => p.state === "MERGED");
+  const merged = mergedPrs.length;
   const open = prs.filter((p) => p.state === "OPEN").length;
   const closed = prs.filter((p) => p.state === "CLOSED").length;
   const repos = summarizeRepositories(prs);
   const monthly = bucketByMonth(prs);
-  const dates = prs.map((p) => p.createdAt).sort(sortByDate);
+  const dates = mergedPrs.map((p) => p.createdAt).sort(sortByDate);
   const first = dates[0] ?? null;
   const last = dates[dates.length - 1] ?? null;
   const yearsActive = first
@@ -147,7 +150,7 @@ export function computeStats(prs: PullRequest[]): ContributionStats {
     firstContribution: first,
     lastContribution: last,
     yearsActive,
-    languages: summarizeLanguages(prs),
+    languages: summarizeLanguages(mergedPrs),
     topRepositories: repos,
     monthly,
     yearly: bucketByYear(monthly),

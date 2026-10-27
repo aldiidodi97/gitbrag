@@ -90,6 +90,24 @@ describe("summarizeRepositories", () => {
       firstContribution: "2024-01-10T00:00:00Z",
     });
   });
+
+  it("skips repositories where nothing was merged", () => {
+    const repos = summarizeRepositories([
+      pr({
+        state: "CLOSED",
+        mergedAt: null,
+        repo: repo({ nameWithOwner: "big/corp", owner: "big", name: "corp" }),
+      }),
+      pr(),
+    ]);
+    expect(repos.map((r) => r.nameWithOwner)).toEqual(["acme/widgets"]);
+    expect(
+      computeStats([pr({ state: "CLOSED", mergedAt: null })]),
+    ).toMatchObject({
+      repositories: 0,
+      totalStars: 0,
+    });
+  });
 });
 
 describe("summarizeLanguages", () => {
@@ -135,8 +153,12 @@ describe("computeStats", () => {
       repositories: 2,
       organizations: 2,
       totalStars: 2100,
-      firstContribution: "2023-11-01T00:00:00Z",
+      firstContribution: "2023-12-05T00:00:00Z",
     });
+    expect(stats.languages.map((l) => [l.name, l.share])).toEqual([
+      ["Go", 0.5],
+      ["TypeScript", 0.5],
+    ]);
     expect(stats.mergeRate).toBeCloseTo(2 / 3);
     expect(stats.yearsActive).toBeGreaterThan(1);
   });

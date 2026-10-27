@@ -14,9 +14,10 @@ import {
   type CompactPullRequest,
 } from "@/lib/github/compact";
 import type { PullRequestState, RepoRef } from "@/lib/github/types";
+import { Select } from "@/components/ui/select";
 import { cn, formatDate } from "@/lib/utils";
 
-const PAGE = 25;
+const PAGE = 5;
 
 const stateMeta: Record<
   PullRequestState,
@@ -74,8 +75,6 @@ export function PullRequestList({
   }, [pullRequests, state, repo, year, query]);
 
   const visible = filtered.slice(0, limit);
-  const selectClass =
-    "h-8 rounded-md border border-border bg-card px-2 font-mono text-[11px] text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
   return (
     <div className="flex flex-col gap-4">
@@ -100,38 +99,38 @@ export function PullRequestList({
             </button>
           ))}
         </div>
-        <select
+        <Select
           aria-label="Repository"
           value={repo}
-          onChange={(e) => setRepo(e.target.value)}
-          className={cn(selectClass, "max-w-[220px]")}
-        >
-          <option value="ALL">All repositories</option>
-          {repoNames.map((r) => (
-            <option key={r} value={r}>
-              {r}
-            </option>
-          ))}
-        </select>
-        <select
+          onChange={(v) => {
+            setRepo(v);
+            setLimit(PAGE);
+          }}
+          options={[
+            { value: "ALL", label: "All repositories" },
+            ...repoNames.map((r) => ({ value: r, label: r })),
+          ]}
+          className="w-full sm:w-56"
+        />
+        <Select
           aria-label="Year"
           value={year}
-          onChange={(e) => setYear(e.target.value)}
-          className={selectClass}
-        >
-          <option value="ALL">All years</option>
-          {years.map((y) => (
-            <option key={y} value={y}>
-              {y}
-            </option>
-          ))}
-        </select>
+          onChange={(v) => {
+            setYear(v);
+            setLimit(PAGE);
+          }}
+          options={[
+            { value: "ALL", label: "All years" },
+            ...years.map((y) => ({ value: y, label: y })),
+          ]}
+          className="w-32"
+        />
         <input
           type="search"
           placeholder="Filter by title"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className={cn(selectClass, "ml-auto w-full sm:w-48")}
+          className="border-border bg-card text-foreground placeholder:text-muted-foreground hover:border-border-strong focus-visible:border-accent ml-auto h-9 w-full rounded-md border px-3 font-mono text-xs transition-colors outline-none sm:w-48"
         />
       </div>
 
@@ -212,7 +211,7 @@ export function PullRequestList({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setLimit((l) => l + PAGE * 2)}
+            onClick={() => setLimit((l) => l + PAGE)}
           >
             Show more <ChevronDown />
           </Button>

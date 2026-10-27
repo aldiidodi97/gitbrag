@@ -141,7 +141,7 @@ export function UserSearch({
           }}
           onFocus={() => suggestions.length > 0 && setOpen(true)}
           onKeyDown={onKeyDown}
-          placeholder="GitHub username, e.g. torvalds"
+          placeholder="GitHub username"
           autoComplete="off"
           autoCapitalize="none"
           spellCheck={false}
@@ -156,9 +156,13 @@ export function UserSearch({
         />
         <Button
           type="submit"
+          variant="raised"
           size={tall ? "md" : "sm"}
           disabled={pending}
-          className="rounded-none font-mono text-xs tracking-[0.08em] uppercase"
+          className={cn(
+            "mr-0.5 font-mono text-xs tracking-[0.08em] uppercase",
+            tall ? "h-10" : "h-8",
+          )}
         >
           {pending ? <Loader2 className="animate-spin" /> : null}
           Brag

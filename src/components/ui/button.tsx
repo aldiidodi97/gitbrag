@@ -9,6 +9,8 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary: "bg-accent text-accent-fg hover:bg-accent/90",
+        raised:
+          "bg-accent text-accent-fg rounded-lg -translate-y-0.5 shadow-[0_4px_0_var(--color-accent-edge),0_8px_14px_var(--color-accent-glow)] transition-[transform,box-shadow,background-color] hover:-translate-y-1 hover:shadow-[0_6px_0_var(--color-accent-edge),0_12px_18px_var(--color-accent-glow)] active:translate-y-0.5 active:shadow-[0_1px_0_var(--color-accent-edge),0_2px_6px_var(--color-accent-glow)]",
         outline:
           "border border-border-strong text-foreground hover:bg-foreground/[0.04]",
         ghost: "text-muted-foreground hover:text-foreground",

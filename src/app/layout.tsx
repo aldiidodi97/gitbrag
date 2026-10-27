@@ -4,12 +4,12 @@ import { ThemeProvider } from "next-themes";
 import { siteConfig, getSiteUrl } from "@/lib/site";
 import "./globals.css";
 
-const manrope = localFont({
-  variable: "--font-manrope",
+const jakartaSans = localFont({
+  variable: "--font-jakarta-sans",
   display: "swap",
   src: [
     {
-      path: "../assets/fonts/manrope-latin-wght-normal.woff2",
+      path: "../assets/fonts/plus-jakarta-sans-latin-wght-normal.woff2",
       weight: "200 800",
     },
   ],
@@ -55,7 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${manrope.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${jakartaSans.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider
