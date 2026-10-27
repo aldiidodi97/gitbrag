@@ -153,8 +153,12 @@ describe("computeStats", () => {
       repositories: 2,
       organizations: 2,
       totalStars: 2100,
-      firstContribution: "2023-11-01T00:00:00Z",
+      firstContribution: "2023-12-05T00:00:00Z",
     });
+    expect(stats.languages.map((l) => [l.name, l.share])).toEqual([
+      ["Go", 0.5],
+      ["TypeScript", 0.5],
+    ]);
     expect(stats.mergeRate).toBeCloseTo(2 / 3);
     expect(stats.yearsActive).toBeGreaterThan(1);
   });

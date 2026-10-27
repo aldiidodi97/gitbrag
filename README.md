@@ -24,6 +24,7 @@ A contribution is a **pull request authored by the user in a repository they do 
 | Repositories of organizations the user belongs to | included, with a one-click toggle to hide them                                     |
 | States                                            | merged, open and closed are kept separate; merged drives the headline number       |
 | Projects                                          | a repository counts (and adds its stars) only once a pull request there was merged |
+| Languages, years active                           | computed from merged pull requests only                                            |
 
 Data comes from the GitHub GraphQL API. Because GitHub search returns at most 1,000 results per query, heavy contributors are fetched year by year, in parallel.
 
