@@ -97,7 +97,7 @@ export function TimelineChart({ monthly }: { monthly: MonthBucket[] }) {
                 fontFamily: "var(--font-mono)",
               }}
               labelStyle={{ color: "var(--color-muted-foreground)" }}
-              itemStyle={{ color: "var(--color-fg)" }}
+              itemStyle={{ color: "var(--color-foreground)" }}
               formatter={(value, name) => [
                 value,
                 name === "merged" ? "Merged" : "Opened",
