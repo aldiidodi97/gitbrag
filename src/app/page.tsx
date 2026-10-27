@@ -52,6 +52,9 @@ export default function HomePage() {
                 {siteConfig.supportLinks.map((link, i) => (
                   <span key={link.href}>
                     {i > 0 ? <span className="mr-1.5">or</span> : null}
+                    <span className="mr-1" aria-hidden="true">
+                      {link.emoji}
+                    </span>
                     <a
                       href={link.href}
                       target="_blank"
