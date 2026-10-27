@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { NextResponse } from "next/server";
 import { loadCardFonts } from "@/lib/cards/fonts";
 import { renderBadgeSvg } from "@/lib/cards/badge-svg";
+import { loadCardLogo } from "@/lib/cards/logo";
 import { CARD_SIZES, parseCardFormat, ShareCard } from "@/lib/cards/share-card";
 import {
   isGitHubError,
@@ -72,10 +73,15 @@ export async function GET(
   }
 
   const format = parseCardFormat(searchParams.get("format"));
-  const fonts = await loadCardFonts();
+  const [fonts, logo] = await Promise.all([loadCardFonts(), loadCardLogo()]);
   const siteHost = new URL(await requestSiteUrl()).host;
   const image = new ImageResponse(
-    <ShareCard report={report} format={format} siteHost={siteHost} />,
+    <ShareCard
+      report={report}
+      format={format}
+      siteHost={siteHost}
+      logo={logo}
+    />,
     {
       ...CARD_SIZES[format],
       fonts,
