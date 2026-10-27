@@ -1,7 +1,10 @@
 "use client";
 
 import { GitMerge, Star } from "lucide-react";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
+import bronze from "@/assets/icons/medal-bronze.png";
+import gold from "@/assets/icons/medal-gold.png";
+import silver from "@/assets/icons/medal-silver.png";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { RepoSummary } from "@/lib/github/types";
@@ -14,11 +17,7 @@ const sorts: Array<{ key: SortKey; label: string }> = [
   { key: "merged", label: "Most merged" },
 ];
 
-const LIST = 9;
-
-function metric(repo: RepoSummary, sort: SortKey) {
-  return sort === "merged" ? repo.merged : repo.stars;
-}
+const LIST = 10;
 
 function sortRepos(repos: RepoSummary[], sort: SortKey) {
   if (sort === "merged") return repos;
@@ -36,7 +35,6 @@ export function ProjectRanking({ repos }: { repos: RepoSummary[] }) {
   const ranked = useMemo(() => sortRepos(repos, sort), [repos, sort]);
   const podium = ranked.slice(0, 3);
   const rest = ranked.slice(3, 3 + limit);
-  const max = metric(ranked[0], sort) || 1;
 
   return (
     <div>
@@ -105,14 +103,11 @@ export function ProjectRanking({ repos }: { repos: RepoSummary[] }) {
                       {repo.name}
                     </span>
                   </div>
-                  <div className="bg-border mt-1.5 h-1 w-full overflow-hidden rounded-full">
-                    <div
-                      className="bg-accent h-full"
-                      style={{
-                        width: `${Math.max(2, (metric(repo, sort) / max) * 100)}%`,
-                      }}
-                    />
-                  </div>
+                  {repo.description ? (
+                    <p className="text-muted-foreground mt-0.5 truncate text-xs">
+                      {repo.description}
+                    </p>
+                  ) : null}
                 </div>
                 <Metric repo={repo} sort={sort} compact />
               </a>
@@ -126,9 +121,9 @@ export function ProjectRanking({ repos }: { repos: RepoSummary[] }) {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setLimit((l) => l + 12)}
+            onClick={() => setLimit((l) => l + 10)}
           >
-            Show {Math.min(12, ranked.length - 3 - limit)} more
+            Show {Math.min(10, ranked.length - 3 - limit)} more
           </Button>
         </div>
       ) : null}
@@ -136,10 +131,34 @@ export function ProjectRanking({ repos }: { repos: RepoSummary[] }) {
   );
 }
 
-const places = [
-  { order: "sm:order-2", pad: "pt-10", ring: "border-accent" },
-  { order: "sm:order-1", pad: "pt-6", ring: "border-border-strong" },
-  { order: "sm:order-3", pad: "pt-3", ring: "border-border-strong" },
+const places: Array<{
+  order: string;
+  pad: string;
+  ring: string;
+  medal: StaticImageData;
+  label: string;
+}> = [
+  {
+    order: "sm:order-2",
+    pad: "pt-6",
+    ring: "border-accent",
+    medal: gold,
+    label: "1st place",
+  },
+  {
+    order: "sm:order-1",
+    pad: "pt-5",
+    ring: "border-border-strong",
+    medal: silver,
+    label: "2nd place",
+  },
+  {
+    order: "sm:order-3",
+    pad: "pt-5",
+    ring: "border-border-strong",
+    medal: bronze,
+    label: "3rd place",
+  },
 ];
 
 function Podium({
@@ -164,14 +183,14 @@ function Podium({
           place === 0 && "border-accent/50",
         )}
       >
-        <span
-          className={cn(
-            "font-mono text-[11px] tabular-nums",
-            place === 0 ? "text-accent" : "text-muted-foreground",
-          )}
-        >
-          #{place + 1}
-        </span>
+        <Image
+          src={p.medal}
+          alt={p.label}
+          title={p.label}
+          width={48}
+          height={48}
+          className={place === 0 ? "size-14" : "size-11"}
+        />
         <Image
           src={repo.ownerAvatarUrl}
           alt=""
