@@ -5,7 +5,7 @@ export const siteConfig = {
     "GitBrag turns any GitHub profile into a shareable record of open-source work: merged pull requests, projects touched, languages and more.",
   repoUrl: "https://github.com/aldiidodi97/gitbrag",
   /** Real profile rendered on the landing page as the live example. */
-  exampleLogin: "sindresorhus",
+  exampleLogin: "depapp",
   twitterHandle: "",
 };
 

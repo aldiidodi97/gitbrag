@@ -7,7 +7,7 @@ import { ThemeToggle } from "./theme-toggle";
 const nav = [
   { label: "Home", href: "/" },
   { label: "Example", href: `/u/${siteConfig.exampleLogin}` },
-  { label: "Source", href: siteConfig.repoUrl },
+  { label: "View Source", href: siteConfig.repoUrl },
 ];
 
 export function Corners() {
