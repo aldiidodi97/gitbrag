@@ -45,7 +45,14 @@ export function ShareCard({
   ];
   const months = stats.monthly.slice(-24);
   const max = Math.max(1, ...months.map((m) => m.merged));
-  const topRepos = stats.topRepositories.slice(0, format === "story" ? 5 : 3);
+  const topRepos = [...stats.topRepositories]
+    .sort(
+      (a, b) =>
+        b.stars - a.stars ||
+        b.merged - a.merged ||
+        a.nameWithOwner.localeCompare(b.nameWithOwner),
+    )
+    .slice(0, format === "story" ? 5 : 3);
   const langs = stats.languages.slice(0, 5);
 
   return (
@@ -315,7 +322,13 @@ export function ShareCard({
               }}
             >
               <span
-                style={{ display: "flex", alignItems: "center", gap: px(10) }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: px(10),
+                  minWidth: 0,
+                  flex: 1,
+                }}
               >
                 <span
                   style={{
@@ -324,18 +337,31 @@ export function ShareCard({
                     borderRadius: 999,
                     background: r.language?.color ?? MUTED,
                     display: "flex",
+                    flexShrink: 0,
                   }}
                 />
-                <span style={{ fontWeight: 600 }}>{r.nameWithOwner}</span>
+                <span
+                  style={{
+                    fontWeight: 600,
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    maxWidth: "100%",
+                  }}
+                >
+                  {r.nameWithOwner}
+                </span>
               </span>
               <span
                 style={{
                   fontFamily: "JetBrains Mono",
                   color: MUTED,
                   fontSize: px(vertical ? 18 : 15),
+                  flexShrink: 0,
+                  marginLeft: px(12),
                 }}
               >
-                {r.merged} merged
+                {formatCompact(r.stars)} stars
               </span>
             </div>
           ))}
