@@ -9,10 +9,10 @@ export default function HomePage() {
   return (
     <>
       <SiteHeader current="/" />
-      <main className="flex min-h-[calc(100vh-96px)] flex-col md:min-h-[calc(100vh-112px)]">
+      <main className="flex flex-1 flex-col">
         <section className="flex flex-1 flex-col px-2">
           <div className="border-border relative mx-auto flex w-full max-w-6xl flex-1 flex-col items-center border-x">
-            <div className="flex w-full flex-col items-center px-4 py-20 md:py-28">
+            <div className="flex w-full flex-1 flex-col items-center justify-center px-4 py-10 md:py-14">
               <Image
                 src={logo}
                 alt="GitBrag"
@@ -21,8 +21,7 @@ export default function HomePage() {
                 priority
                 className="mb-5 size-20 md:size-24"
               />
-              <span className="border-border text-foreground inline-flex items-center gap-2 border px-3 py-1 font-mono text-xs tracking-[0.08em] uppercase md:text-sm">
-                <span className="bg-accent size-2 md:size-2.5" />
+              <span className="border-border text-foreground inline-flex items-center border px-3 py-1 font-mono text-xs tracking-[0.08em] uppercase md:text-sm">
                 Open-source bragging rights
               </span>
               <h1 className="mt-4 max-w-2xl text-center text-[40px] leading-10 tracking-tighter text-balance lg:text-6xl xl:text-7xl xl:leading-16">
