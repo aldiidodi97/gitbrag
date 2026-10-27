@@ -18,7 +18,7 @@ export function LanguageBar({ languages }: { languages: LanguageShare[] }) {
             title={`${l.name} ${(l.share * 100).toFixed(0)}%`}
             style={{
               width: `${l.share * 100}%`,
-              background: l.color ?? "var(--muted-foreground)",
+              background: l.color ?? "var(--color-muted-foreground)",
             }}
           />
         ))}
@@ -37,7 +37,9 @@ export function LanguageBar({ languages }: { languages: LanguageShare[] }) {
             <span className="flex min-w-0 items-center gap-2">
               <span
                 className="size-2 shrink-0 rounded-full"
-                style={{ background: l.color ?? "var(--muted-foreground)" }}
+                style={{
+                  background: l.color ?? "var(--color-muted-foreground)",
+                }}
               />
               <span className="truncate">{l.name}</span>
             </span>

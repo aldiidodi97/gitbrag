@@ -69,7 +69,7 @@ export function TimelineChart({ monthly }: { monthly: MonthBucket[] }) {
             <XAxis
               dataKey="label"
               tick={{
-                fill: "var(--muted-foreground)",
+                fill: "var(--color-muted-foreground)",
                 fontSize: 10,
                 fontFamily: "var(--font-mono)",
               }}
@@ -80,7 +80,7 @@ export function TimelineChart({ monthly }: { monthly: MonthBucket[] }) {
             <YAxis
               allowDecimals={false}
               tick={{
-                fill: "var(--muted-foreground)",
+                fill: "var(--color-muted-foreground)",
                 fontSize: 10,
                 fontFamily: "var(--font-mono)",
               }}
@@ -90,13 +90,14 @@ export function TimelineChart({ monthly }: { monthly: MonthBucket[] }) {
             <Tooltip
               cursor={{ fill: "var(--border)" }}
               contentStyle={{
-                background: "var(--card)",
+                background: "var(--color-card)",
                 border: "1px solid var(--border)",
                 borderRadius: 6,
                 fontSize: 12,
                 fontFamily: "var(--font-mono)",
               }}
-              labelStyle={{ color: "var(--muted-foreground)" }}
+              labelStyle={{ color: "var(--color-muted-foreground)" }}
+              itemStyle={{ color: "var(--color-fg)" }}
               formatter={(value, name) => [
                 value,
                 name === "merged" ? "Merged" : "Opened",
@@ -105,7 +106,8 @@ export function TimelineChart({ monthly }: { monthly: MonthBucket[] }) {
             <Bar
               dataKey="opened"
               stackId="a"
-              fill="var(--border-strong)"
+              fill="var(--color-muted-foreground)"
+              fillOpacity={0.45}
               radius={[0, 0, 0, 0]}
             />
             <Bar
