@@ -39,13 +39,15 @@ export function summarizeRepositories(prs: PullRequest[]): RepoSummary[] {
       });
     }
   }
-  return [...byRepo.values()].sort(
-    (a, b) =>
-      b.merged - a.merged ||
-      b.pullRequests - a.pullRequests ||
-      b.stars - a.stars ||
-      a.nameWithOwner.localeCompare(b.nameWithOwner),
-  );
+  return [...byRepo.values()]
+    .filter((repo) => repo.merged > 0)
+    .sort(
+      (a, b) =>
+        b.merged - a.merged ||
+        b.pullRequests - a.pullRequests ||
+        b.stars - a.stars ||
+        a.nameWithOwner.localeCompare(b.nameWithOwner),
+    );
 }
 
 export function summarizeLanguages(prs: PullRequest[]): LanguageShare[] {

@@ -90,6 +90,24 @@ describe("summarizeRepositories", () => {
       firstContribution: "2024-01-10T00:00:00Z",
     });
   });
+
+  it("skips repositories where nothing was merged", () => {
+    const repos = summarizeRepositories([
+      pr({
+        state: "CLOSED",
+        mergedAt: null,
+        repo: repo({ nameWithOwner: "big/corp", owner: "big", name: "corp" }),
+      }),
+      pr(),
+    ]);
+    expect(repos.map((r) => r.nameWithOwner)).toEqual(["acme/widgets"]);
+    expect(
+      computeStats([pr({ state: "CLOSED", mergedAt: null })]),
+    ).toMatchObject({
+      repositories: 0,
+      totalStars: 0,
+    });
+  });
 });
 
 describe("summarizeLanguages", () => {
