@@ -4,7 +4,7 @@ export default function ProfileNotFound() {
   return (
     <NotFoundView
       title="No GitHub user by that name."
-      description="Check the spelling, or look up another username below."
+      description="Check the spelling of the username and try again."
     />
   );
 }

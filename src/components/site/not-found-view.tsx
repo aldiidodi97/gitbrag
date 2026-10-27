@@ -1,8 +1,8 @@
 import Image from "next/image";
 import notFound from "@/assets/icons/not-found.png";
-import { UserSearch } from "@/components/search/user-search";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { ButtonLink } from "@/components/ui/button";
 
 export function NotFoundView({
   title,
@@ -33,12 +33,9 @@ export function NotFoundView({
               <p className="text-muted-foreground mt-4 max-w-prose text-center text-sm tracking-tight text-balance lg:text-base">
                 {description}
               </p>
-              <div className="w-full max-w-lg pt-10 pb-4">
-                <UserSearch autoFocus />
-              </div>
-              <span className="text-muted-foreground font-mono text-xs uppercase">
-                Public GitHub data only · no login
-              </span>
+              <ButtonLink href="/" className="mt-10">
+                Back home
+              </ButtonLink>
             </div>
           </div>
         </section>
