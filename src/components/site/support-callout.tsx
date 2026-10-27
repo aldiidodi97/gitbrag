@@ -1,7 +1,11 @@
 import Image from "next/image";
+import flagId from "@/assets/icons/flag-id.png";
+import globe from "@/assets/icons/globe.png";
 import heart from "@/assets/icons/heart.png";
 import { ButtonLink } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site";
+
+const audienceIcons = { "flag-id": flagId, globe } as const;
 
 export function SupportCallout() {
   return (
@@ -25,9 +29,8 @@ export function SupportCallout() {
             className="w-full min-w-44 justify-between gap-3 sm:w-auto"
           >
             <span>{link.label}</span>
-            <span className="font-mono text-[11px] font-normal uppercase opacity-80">
-              {link.note}
-            </span>
+            <Image src={audienceIcons[link.icon]} alt="" className="size-5" />
+            <span className="sr-only">{link.note}</span>
           </ButtonLink>
         ))}
       </div>

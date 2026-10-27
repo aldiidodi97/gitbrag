@@ -1,3 +1,10 @@
+export interface SupportLink {
+  label: string;
+  note: string;
+  icon: "flag-id" | "globe";
+  href: string;
+}
+
 export const siteConfig = {
   name: "GitBrag",
   tagline: "Show off your open-source contributions.",
@@ -12,14 +19,16 @@ export const siteConfig = {
     {
       label: "Pamerin",
       note: "Indonesia",
+      icon: "flag-id",
       href: "https://pamerin.id/depapp/dukung",
     },
     {
       label: "PayPal",
       note: "International",
+      icon: "globe",
       href: "https://www.paypal.me/depapp",
     },
-  ],
+  ] satisfies SupportLink[],
 };
 
 export function getSiteUrl() {
