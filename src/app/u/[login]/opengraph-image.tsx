@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { loadCardFonts } from "@/lib/cards/fonts";
+import { loadCardLogo } from "@/lib/cards/logo";
 import { CARD_SIZES, PendingCard, ShareCard } from "@/lib/cards/share-card";
 import { getUser, loadReport } from "@/lib/github";
 import { requestSiteUrl } from "@/lib/site-request";
@@ -14,9 +15,10 @@ export default async function OpenGraphImage({
   params: Promise<{ login: string }>;
 }) {
   const { login } = await params;
-  const [result, fonts] = await Promise.all([
+  const [result, fonts, logo] = await Promise.all([
     loadReport(login),
     loadCardFonts(),
+    loadCardLogo(),
   ]);
   const siteHost = new URL(await requestSiteUrl()).host;
   if (result.status === "pending") {
@@ -27,7 +29,12 @@ export default async function OpenGraphImage({
     );
   }
   return new ImageResponse(
-    <ShareCard report={result.report} format="og" siteHost={siteHost} />,
+    <ShareCard
+      report={result.report}
+      format="og"
+      siteHost={siteHost}
+      logo={logo}
+    />,
     { ...size, fonts },
   );
 }

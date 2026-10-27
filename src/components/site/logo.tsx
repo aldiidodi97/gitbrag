@@ -1,12 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <Link href="/" className={cn("flex items-center gap-2.5", className)}>
-      <span aria-hidden className="bg-accent grid size-6 place-items-center">
-        <span className="bg-accent-fg size-2.5" />
-      </span>
+    <Link href="/" className={cn("flex items-center gap-2", className)}>
+      <Image
+        src="/logo.png"
+        alt=""
+        aria-hidden
+        width={28}
+        height={28}
+        priority
+        className="size-7"
+      />
       <span className="text-foreground text-[15px] font-semibold tracking-tight">
         GitBrag
       </span>

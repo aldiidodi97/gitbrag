@@ -1,3 +1,5 @@
+<p align="center"><img src="public/logo.png" alt="GitBrag" width="120"></p>
+
 # GitBrag
 
 **Show off your open-source contributions.**

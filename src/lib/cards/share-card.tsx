@@ -24,7 +24,9 @@ export function ShareCard({
   report,
   format,
   siteHost,
+  logo,
 }: {
+  logo?: string;
   report: ContributionReport;
   format: CardFormat;
   siteHost: string;
@@ -99,15 +101,20 @@ export function ShareCard({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: px(10) }}>
-          <div
-            style={{
-              width: px(22),
-              height: px(22),
-              borderRadius: px(5),
-              background: BLUE,
-              display: "flex",
-            }}
-          />
+          {logo ? (
+            // eslint-disable-next-line @next/next/no-img-element -- Satori renders plain <img>
+            <img src={logo} width={px(26)} height={px(26)} alt="" />
+          ) : (
+            <div
+              style={{
+                width: px(22),
+                height: px(22),
+                borderRadius: px(5),
+                background: BLUE,
+                display: "flex",
+              }}
+            />
+          )}
           <span
             style={{ fontSize: px(22), fontWeight: 600, letterSpacing: -0.5 }}
           >
