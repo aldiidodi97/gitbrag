@@ -8,7 +8,13 @@ import silver from "@/assets/icons/medal-silver.png";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { RepoSummary } from "@/lib/github/types";
-import { cn, formatCompact, formatNumber, pluralize } from "@/lib/utils";
+import {
+  repoPullsUrl,
+  cn,
+  formatCompact,
+  formatNumber,
+  pluralize,
+} from "@/lib/utils";
 
 type SortKey = "merged" | "stars";
 
@@ -29,7 +35,13 @@ function sortRepos(repos: RepoSummary[], sort: SortKey) {
   );
 }
 
-export function ProjectRanking({ repos }: { repos: RepoSummary[] }) {
+export function ProjectRanking({
+  repos,
+  login,
+}: {
+  repos: RepoSummary[];
+  login: string;
+}) {
   const [sort, setSort] = useState<SortKey>("stars");
   const [limit, setLimit] = useState(LIST);
   const ranked = useMemo(() => sortRepos(repos, sort), [repos, sort]);
@@ -72,7 +84,13 @@ export function ProjectRanking({ repos }: { repos: RepoSummary[] }) {
 
       <ol className="grid items-end gap-3 sm:grid-cols-3">
         {podium.map((repo, i) => (
-          <Podium key={repo.nameWithOwner} repo={repo} place={i} sort={sort} />
+          <Podium
+            key={repo.nameWithOwner}
+            repo={repo}
+            place={i}
+            sort={sort}
+            login={login}
+          />
         ))}
       </ol>
 
@@ -81,7 +99,7 @@ export function ProjectRanking({ repos }: { repos: RepoSummary[] }) {
           {rest.map((repo, i) => (
             <li key={repo.nameWithOwner}>
               <a
-                href={repo.url}
+                href={repoPullsUrl(repo.url, login)}
                 target="_blank"
                 rel="noreferrer"
                 className="group flex items-center gap-4 py-3"
@@ -165,16 +183,18 @@ function Podium({
   repo,
   place,
   sort,
+  login,
 }: {
   repo: RepoSummary;
   place: number;
   sort: SortKey;
+  login: string;
 }) {
   const p = places[place];
   return (
     <li className={cn("flex flex-col", p.order)}>
       <a
-        href={repo.url}
+        href={repoPullsUrl(repo.url, login)}
         target="_blank"
         rel="noreferrer"
         className={cn(

@@ -313,7 +313,7 @@ async function Report({
       </div>
 
       <section className="mt-12">
-        <ProjectRanking repos={stats.topRepositories} />
+        <ProjectRanking repos={stats.topRepositories} login={user.login} />
       </section>
 
       <section className="mt-14">

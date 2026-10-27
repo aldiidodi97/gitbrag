@@ -42,3 +42,7 @@ export function pluralize(
 ) {
   return n === 1 ? singular : plural;
 }
+
+export function repoPullsUrl(repoUrl: string, login: string) {
+  return `${repoUrl}/pulls?q=${encodeURIComponent(`is:pr author:${login}`)}`;
+}
