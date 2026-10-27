@@ -9,7 +9,6 @@ import {
   StatsStrip,
 } from "@/components/landing/sections";
 import { UserSearch } from "@/components/search/user-search";
-import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { ButtonLink } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site";
@@ -98,7 +97,6 @@ export default function HomePage() {
           </div>
         </div>
       </main>
-      <SiteFooter />
     </>
   );
 }

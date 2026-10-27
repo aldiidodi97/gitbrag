@@ -12,7 +12,6 @@ import { RepoGrid } from "@/components/profile/repo-grid";
 import { ShareBar } from "@/components/profile/share-bar";
 import { TimelineChart } from "@/components/profile/timeline-chart";
 import { UserSearch } from "@/components/search/user-search";
-import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { ButtonLink } from "@/components/ui/button";
 import {
@@ -100,7 +99,6 @@ export default async function ProfilePage({ params, searchParams }: Props) {
           </div>
         </div>
       </main>
-      <SiteFooter />
     </>
   );
 }

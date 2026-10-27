@@ -1,5 +1,4 @@
 import { UserSearch } from "@/components/search/user-search";
-import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 
 export default function ProfileNotFound() {
@@ -20,7 +19,6 @@ export default function ProfileNotFound() {
           </div>
         </div>
       </main>
-      <SiteFooter />
     </>
   );
 }
