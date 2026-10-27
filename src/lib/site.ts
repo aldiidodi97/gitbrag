@@ -1,7 +1,6 @@
 export interface SupportLink {
   label: string;
   note: string;
-  icon: "flag-id" | "globe";
   emoji: string;
   href: string;
 }
@@ -20,15 +19,13 @@ export const siteConfig = {
     {
       label: "Pamerin",
       note: "Indonesia",
-      icon: "flag-id",
       emoji: "🇮🇩",
       href: "https://pamerin.id/depapp/dukung",
     },
     {
       label: "PayPal",
       note: "International",
-      icon: "globe",
-      emoji: "🌍",
+      emoji: "🌎",
       href: "https://www.paypal.me/depapp",
     },
   ] satisfies SupportLink[],
