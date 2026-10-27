@@ -17,7 +17,7 @@ const sorts: Array<{ key: SortKey; label: string }> = [
   { key: "merged", label: "Most merged" },
 ];
 
-const LIST = 10;
+const LIST = 5;
 
 function sortRepos(repos: RepoSummary[], sort: SortKey) {
   if (sort === "merged") return repos;

@@ -17,7 +17,7 @@ import type { PullRequestState, RepoRef } from "@/lib/github/types";
 import { Select } from "@/components/ui/select";
 import { cn, formatDate } from "@/lib/utils";
 
-const PAGE = 10;
+const PAGE = 5;
 
 const stateMeta: Record<
   PullRequestState,

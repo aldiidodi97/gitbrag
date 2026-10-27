@@ -310,11 +310,11 @@ async function Report({
       </dl>
 
       <section className="mt-12">
-        <TimelineChart monthly={stats.monthly} />
+        <ProjectRanking repos={stats.topRepositories} />
       </section>
 
       <section className="mt-14">
-        <ProjectRanking repos={stats.topRepositories} />
+        <TimelineChart monthly={stats.monthly} />
       </section>
 
       <section className="mt-14 grid gap-10 lg:grid-cols-5 lg:gap-14">
