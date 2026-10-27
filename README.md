@@ -100,6 +100,10 @@ Next.js (App Router), React, TypeScript, Tailwind CSS, Recharts, `next-themes`, 
 
 Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## Credits
+
+The small 3D icons on profile pages come from Microsoft's [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) (MIT).
+
 ## License
 
 [MIT](LICENSE)

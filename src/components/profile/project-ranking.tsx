@@ -10,8 +10,8 @@ import { cn, formatCompact, formatNumber, pluralize } from "@/lib/utils";
 type SortKey = "merged" | "stars";
 
 const sorts: Array<{ key: SortKey; label: string }> = [
-  { key: "merged", label: "Most merged" },
   { key: "stars", label: "Most starred" },
+  { key: "merged", label: "Most merged" },
 ];
 
 const LIST = 9;
@@ -31,7 +31,7 @@ function sortRepos(repos: RepoSummary[], sort: SortKey) {
 }
 
 export function ProjectRanking({ repos }: { repos: RepoSummary[] }) {
-  const [sort, setSort] = useState<SortKey>("merged");
+  const [sort, setSort] = useState<SortKey>("stars");
   const [limit, setLimit] = useState(LIST);
   const ranked = useMemo(() => sortRepos(repos, sort), [repos, sort]);
   const podium = ranked.slice(0, 3);

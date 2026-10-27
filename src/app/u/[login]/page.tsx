@@ -1,6 +1,10 @@
 import { AlertTriangle, Building2, GitPullRequest } from "lucide-react";
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
+import companyIcon from "@/assets/icons/company.png";
+import followersIcon from "@/assets/icons/followers.png";
+import locationIcon from "@/assets/icons/location.png";
+import websiteIcon from "@/assets/icons/website.png";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
@@ -10,7 +14,7 @@ import { PullRequestList } from "@/components/profile/pr-list";
 import { ProjectRanking } from "@/components/profile/project-ranking";
 import { ShareBar } from "@/components/profile/share-bar";
 import { TimelineChart } from "@/components/profile/timeline-chart";
-import { UserSearch } from "@/components/search/user-search";
+import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { ButtonLink } from "@/components/ui/button";
 import {
@@ -90,22 +94,41 @@ export default async function ProfilePage({ params, searchParams }: Props) {
           <Suspense fallback={<ReportSkeleton />}>
             <Report login={user.login} hideOrgs={hideOrgs} />
           </Suspense>
-          <section className="border-border mt-16 border-t pt-10">
-            <span className="label">Look up someone else</span>
-            <UserSearch size="md" className="mt-3 max-w-xl" />
-          </section>
         </div>
       </main>
+      <SiteFooter />
     </>
   );
 }
 
 function Identity({ user }: { user: GitHubUser }) {
-  const facts = [
-    user.company,
-    user.location,
-    `${formatCompact(user.followers)} followers`,
-  ].filter(Boolean) as string[];
+  const website = user.websiteUrl
+    ? user.websiteUrl.startsWith("http")
+      ? user.websiteUrl
+      : `https://${user.websiteUrl}`
+    : null;
+  const facts: Array<{
+    icon: StaticImageData;
+    text: string;
+    title: string;
+    href?: string;
+  }> = [];
+  if (user.company)
+    facts.push({ icon: companyIcon, text: user.company, title: "Company" });
+  if (user.location)
+    facts.push({ icon: locationIcon, text: user.location, title: "Location" });
+  facts.push({
+    icon: followersIcon,
+    text: `${formatCompact(user.followers)} followers`,
+    title: "Followers",
+  });
+  if (website)
+    facts.push({
+      icon: websiteIcon,
+      text: website.replace(/^https?:\/\//, ""),
+      title: "Website",
+      href: website,
+    });
   return (
     <div className="flex flex-col items-center text-center">
       <Image
@@ -132,25 +155,28 @@ function Identity({ user }: { user: GitHubUser }) {
           {user.bio}
         </p>
       ) : null}
-      <div className="text-muted-foreground mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase">
+      <ul className="text-muted-foreground mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2 font-mono text-[11px] uppercase">
         {facts.map((f) => (
-          <span key={f}>{f}</span>
+          <li key={f.title} title={f.title}>
+            {f.href ? (
+              <a
+                href={f.href}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-accent inline-flex items-center gap-1.5 normal-case"
+              >
+                <Image src={f.icon} alt={f.title} width={18} height={18} />
+                {f.text}
+              </a>
+            ) : (
+              <span className="inline-flex items-center gap-1.5">
+                <Image src={f.icon} alt={f.title} width={18} height={18} />
+                {f.text}
+              </span>
+            )}
+          </li>
         ))}
-        {user.websiteUrl ? (
-          <a
-            href={
-              user.websiteUrl.startsWith("http")
-                ? user.websiteUrl
-                : `https://${user.websiteUrl}`
-            }
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-accent normal-case"
-          >
-            {user.websiteUrl.replace(/^https?:\/\//, "")}
-          </a>
-        ) : null}
-      </div>
+      </ul>
     </div>
   );
 }
