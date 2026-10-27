@@ -3,67 +3,60 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
-  --muted: #f5f6f8;
-  --muted-foreground: #6b7280;
-  --card: #ffffff;
-  --card-foreground: #0a0a0a;
-  --border: #e5e7eb;
-  --border-strong: #d1d5db;
-  --input: #e5e7eb;
+  --bg: #fcfcfa;
+  --bg-elev: #f4f4f0;
+  --fg: #14161c;
+  --fg-muted: #676b76;
+  --border: #14161c1a;
+  --border-strong: #14161c3a;
   --accent: #2563eb;
-  --accent-foreground: #ffffff;
-  --accent-soft: #eff4ff;
-  --positive: #16a34a;
-  --negative: #dc2626;
-  --ring: #2563eb;
-  --grid: rgba(37, 99, 235, 0.08);
-  --dot: rgba(37, 99, 235, 0.35);
+  --accent-fg: #ffffff;
+  --danger: #d1343f;
+  --success: #15803d;
+  --warning: #d97706;
 }
 
 .dark {
-  --background: #090c14;
-  --foreground: #f3f4f6;
-  --muted: #0f1320;
-  --muted-foreground: #9ca3af;
-  --card: #0d111c;
-  --card-foreground: #f3f4f6;
-  --border: #1c2233;
-  --border-strong: #2a3246;
-  --input: #1c2233;
-  --accent: #3b82f6;
-  --accent-foreground: #ffffff;
-  --accent-soft: #111a33;
-  --positive: #22c55e;
-  --negative: #f87171;
-  --ring: #3b82f6;
-  --grid: rgba(59, 130, 246, 0.1);
-  --dot: rgba(59, 130, 246, 0.45);
+  --bg: #0e1116;
+  --bg-elev: #161a21;
+  --fg: #eceef2;
+  --fg-muted: #949aa6;
+  --border: #ffffff14;
+  --border-strong: #ffffff2e;
+  --accent: #5b9dff;
+  --accent-fg: #0b1220;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-card: var(--bg-elev);
+  --color-card-foreground: var(--fg);
+  --color-muted: var(--bg-elev);
+  --color-muted-foreground: var(--fg-muted);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
-  --color-input: var(--input);
+  --color-input: var(--border);
   --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent-soft: var(--accent-soft);
-  --color-positive: var(--positive);
-  --color-negative: var(--negative);
-  --color-ring: var(--ring);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono:
-    var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-foreground: var(--accent-fg);
+  --color-accent-soft: color-mix(in oklch, var(--accent) 10%, transparent);
+  --color-positive: var(--success);
+  --color-success: var(--success);
+  --color-negative: var(--danger);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-ring: var(--accent);
+
   --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
 }
 
 * {
@@ -75,69 +68,37 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--fg);
   font-family: var(--font-sans);
-  font-feature-settings: "cv11", "ss01", "ss03";
   -webkit-font-smoothing: antialiased;
 }
 
-/* Vantage-style hairline frame and dot grid */
-.frame {
-  position: relative;
-}
-.frame::before,
-.frame::after {
-  content: "";
-  position: absolute;
-  inset: 0 auto;
-  width: 1px;
-  background: var(--border);
-  pointer-events: none;
-}
-.frame::before {
-  left: 0;
-}
-.frame::after {
-  right: 0;
+/* Vantage utilities */
+.bg-dotgrid {
+  background-image: radial-gradient(
+    color-mix(in oklch, var(--fg) 16%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
 }
 
-.dot-grid {
-  background-image: radial-gradient(var(--dot) 1px, transparent 1px);
-  background-size: 14px 14px;
-  mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+.bg-hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklch, var(--fg) 8%, transparent) 0,
+    color-mix(in oklch, var(--fg) 8%, transparent) 1px,
+    transparent 1px,
+    transparent 7px
+  );
 }
 
-.hairline-corners::before,
-.hairline-corners::after,
-.hairline-corners > .corner::before,
-.hairline-corners > .corner::after {
-  content: "";
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-color: var(--border-strong);
-  border-style: solid;
-}
-.hairline-corners::before {
-  top: -1px;
-  left: -1px;
-  border-width: 1px 0 0 1px;
-}
-.hairline-corners::after {
-  top: -1px;
-  right: -1px;
-  border-width: 1px 1px 0 0;
-}
-.hairline-corners > .corner::before {
-  bottom: -1px;
-  left: -1px;
-  border-width: 0 0 1px 1px;
-}
-.hairline-corners > .corner::after {
-  bottom: -1px;
-  right: -1px;
-  border-width: 0 1px 1px 0;
+.hero-glow {
+  background: radial-gradient(
+    70% 100% at 50% 0%,
+    color-mix(in oklch, var(--accent) 14%, transparent),
+    transparent 72%
+  );
 }
 
 .label {
@@ -145,25 +106,38 @@ body {
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted-foreground);
+  color: var(--fg-muted);
 }
 
 .tabular {
   font-variant-numeric: tabular-nums;
 }
 
-@keyframes fade-up {
+@keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-.fade-up {
-  animation: fade-up 0.5s ease-out both;
+.rise {
+  animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes grow-y {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.grow-y {
+  transform-origin: bottom;
+  animation: grow-y 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes shimmer {
@@ -177,11 +151,34 @@ body {
 .skeleton {
   background: linear-gradient(
     90deg,
-    var(--muted) 25%,
-    var(--border) 50%,
-    var(--muted) 75%
+    var(--bg-elev) 25%,
+    var(--border-strong) 50%,
+    var(--bg-elev) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
-  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .grow-y,
+  .skeleton {
+    animation: none;
+  }
+}
+
+@keyframes letter-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+.letter-in {
+  animation: letter-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
 }

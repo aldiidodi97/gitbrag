@@ -1,44 +1,55 @@
-import { Star } from "lucide-react";
 import Link from "next/link";
-import { ButtonLink } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site";
 import { Logo } from "./logo";
+import { MobileMenu } from "./mobile-menu";
 import { ThemeToggle } from "./theme-toggle";
 
-export function SiteHeader() {
+const nav = [
+  { label: "Home", href: "/" },
+  { label: "Example", href: `/u/${siteConfig.exampleLogin}` },
+  { label: "Source", href: siteConfig.repoUrl },
+];
+
+export function Corners() {
   return (
-    <header className="border-border bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 md:px-8">
-        <div className="flex items-center gap-8">
+    <>
+      <span className="border-border-strong absolute -top-px -left-px h-3 w-3 border-t-2 border-l-2" />
+      <span className="border-border-strong absolute -top-px -right-px h-3 w-3 border-t-2 border-r-2" />
+      <span className="border-border-strong absolute -bottom-px -left-px h-3 w-3 border-b-2 border-l-2" />
+      <span className="border-border-strong absolute -right-px -bottom-px h-3 w-3 border-r-2 border-b-2" />
+    </>
+  );
+}
+
+export function SiteHeader({ current = "/" }: { current?: string }) {
+  return (
+    <header className="bg-background sticky top-0 z-50 px-2 pt-2">
+      <div className="border-border relative mx-auto flex h-14 w-full max-w-6xl items-center justify-between border px-4 md:h-16">
+        <Corners />
+        <div className="flex flex-1 items-center">
           <Logo />
-          <nav className="text-muted-foreground hidden items-center gap-6 text-sm md:flex">
-            <Link href="/#features" className="hover:text-foreground">
-              Features
-            </Link>
-            <Link href="/#how-it-works" className="hover:text-foreground">
-              How it works
-            </Link>
-            <Link href="/#faq" className="hover:text-foreground">
-              FAQ
-            </Link>
-          </nav>
         </div>
-        <div className="flex items-center gap-2">
-          <ButtonLink
-            href={siteConfig.repoUrl}
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hidden sm:inline-flex"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Star />
-            Star on GitHub
-          </ButtonLink>
+        <nav className="hidden items-center gap-6 lg:flex">
+          {nav.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              {...(item.href.startsWith("http")
+                ? { target: "_blank", rel: "noreferrer" }
+                : {})}
+              className={
+                item.href === current
+                  ? "text-accent text-[15px] tracking-tight"
+                  : "text-foreground hover:text-accent text-[15px] tracking-tight transition-colors"
+              }
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="flex flex-1 items-center justify-end gap-2">
           <ThemeToggle />
-          <ButtonLink href="/#search" size="sm">
-            Get your card
-          </ButtonLink>
+          <MobileMenu items={nav} />
         </div>
       </div>
     </header>

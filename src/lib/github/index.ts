@@ -1,10 +1,13 @@
 export * from "./types";
-export { GitHubError, hasGitHubToken } from "./client";
+export { GitHubError, hasGitHubToken, isGitHubError } from "./client";
 export {
-  getContributionReport,
+  DEFAULT_BUDGET_MS,
   getUser,
+  loadReport,
   REPORT_REVALIDATE_SECONDS,
+  type ReportResult,
 } from "./report";
+export { BudgetExceededError, type ReportProgress } from "./budget";
 export {
   compactPullRequests,
   expandPullRequests,

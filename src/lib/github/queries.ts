@@ -47,8 +47,6 @@ export const PULL_REQUEST_SEARCH_QUERY = /* GraphQL */ `
           createdAt
           mergedAt
           closedAt
-          additions
-          deletions
           repository {
             nameWithOwner
             name

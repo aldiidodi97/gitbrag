@@ -1,4 +1,4 @@
-import type { ContributionReport } from "@/lib/github/types";
+import type { ContributionReport, GitHubUser } from "@/lib/github/types";
 import { formatCompact } from "@/lib/utils";
 
 export type CardFormat = "og" | "square" | "story";
@@ -32,7 +32,7 @@ export function ShareCard({
   const { user, stats } = report;
   const { width, height } = CARD_SIZES[format];
   const vertical = format !== "og";
-  const scale = format === "story" ? 1.35 : format === "square" ? 1.15 : 1;
+  const scale = format === "story" ? 1.35 : 1;
   const px = (n: number) => Math.round(n * scale);
 
   const kpis = [
@@ -43,7 +43,7 @@ export function ShareCard({
   ];
   const months = stats.monthly.slice(-24);
   const max = Math.max(1, ...months.map((m) => m.merged));
-  const topRepos = stats.topRepositories.slice(0, vertical ? 5 : 3);
+  const topRepos = stats.topRepositories.slice(0, format === "story" ? 5 : 3);
   const langs = stats.languages.slice(0, 5);
 
   return (
@@ -236,6 +236,7 @@ export function ShareCard({
           gap: px(32),
           marginTop: px(vertical ? 40 : 28),
           flex: 1,
+          overflow: "hidden",
         }}
       >
         <div
@@ -260,7 +261,7 @@ export function ShareCard({
               display: "flex",
               alignItems: "flex-end",
               gap: px(5),
-              height: px(vertical ? 160 : 110),
+              height: px(format === "story" ? 160 : 110),
               marginTop: px(14),
             }}
           >
@@ -378,6 +379,71 @@ export function ShareCard({
         >
           {Math.round(stats.mergeRate * 100)}% MERGE RATE
         </span>
+      </div>
+    </div>
+  );
+}
+
+/** Shown while a profile's report is still being built; never cached. */
+export function PendingCard({
+  user,
+  format,
+  siteHost,
+}: {
+  user: GitHubUser;
+  format: CardFormat;
+  siteHost: string;
+}) {
+  const { width, height } = CARD_SIZES[format];
+  const scale = format === "story" ? 1.35 : format === "square" ? 1.15 : 1;
+  const px = (n: number) => Math.round(n * scale);
+  return (
+    <div
+      style={{
+        width,
+        height,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: BG,
+        color: "white",
+        fontFamily: "Inter",
+        gap: px(20),
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={user.avatarUrl}
+        alt=""
+        width={px(112)}
+        height={px(112)}
+        style={{ borderRadius: px(24), border: `2px solid ${BORDER}` }}
+      />
+      <div style={{ display: "flex", fontSize: px(44), fontWeight: 800 }}>
+        {user.name ?? user.login}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          fontFamily: "JetBrains Mono",
+          fontSize: px(20),
+          color: MUTED,
+        }}
+      >
+        @{user.login} · OPEN-SOURCE CONTRIBUTIONS
+      </div>
+      <div
+        style={{
+          display: "flex",
+          marginTop: px(16),
+          fontSize: px(18),
+          color: BLUE,
+          fontFamily: "JetBrains Mono",
+          letterSpacing: 1,
+        }}
+      >
+        {siteHost.toUpperCase()}/U/{user.login.toUpperCase()}
       </div>
     </div>
   );

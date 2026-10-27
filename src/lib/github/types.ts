@@ -28,8 +28,6 @@ export interface PullRequest {
   createdAt: string;
   mergedAt: string | null;
   closedAt: string | null;
-  additions: number;
-  deletions: number;
   repo: RepoRef;
   /** The repository belongs to an organization the user is a public member of. */
   inUserOrg: boolean;
@@ -55,8 +53,6 @@ export interface GitHubUser {
 export interface RepoSummary extends RepoRef {
   pullRequests: number;
   merged: number;
-  additions: number;
-  deletions: number;
   firstContribution: string;
   lastContribution: string;
 }
@@ -89,8 +85,6 @@ export interface ContributionStats {
   repositories: number;
   organizations: number;
   totalStars: number;
-  additions: number;
-  deletions: number;
   firstContribution: string | null;
   lastContribution: string | null;
   yearsActive: number;

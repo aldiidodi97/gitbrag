@@ -1,12 +1,4 @@
-import {
-  AlertTriangle,
-  Building2,
-  CalendarDays,
-  GitMerge,
-  GitPullRequest,
-  Languages,
-  Star,
-} from "lucide-react";
+import { AlertTriangle, Building2, GitPullRequest } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -14,25 +6,25 @@ import { Suspense, type ReactNode } from "react";
 import { KpiCard, Sparkline } from "@/components/profile/kpi-card";
 import { LanguageBar } from "@/components/profile/language-bar";
 import { ProfileHeader } from "@/components/profile/profile-header";
+import { ReportWarmup } from "@/components/profile/report-warmup";
 import { PullRequestList } from "@/components/profile/pr-list";
 import { RepoGrid } from "@/components/profile/repo-grid";
 import { ShareBar } from "@/components/profile/share-bar";
 import { TimelineChart } from "@/components/profile/timeline-chart";
 import { UserSearch } from "@/components/search/user-search";
-import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import {
-  GitHubError,
+  isGitHubError,
   compactPullRequests,
-  getContributionReport,
+  loadReport,
   getUser,
   hasGitHubToken,
   type GitHubUser,
 } from "@/lib/github";
 import { computeStats } from "@/lib/github/stats";
-import { getSiteUrl, profileUrl, siteConfig } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
+import { requestProfileUrl, requestSiteUrl } from "@/lib/site-request";
 import {
   cn,
   formatCompact,
@@ -47,7 +39,8 @@ async function loadUser(login: string): Promise<GitHubUser> {
   try {
     return await getUser(login);
   } catch (error) {
-    if (error instanceof GitHubError && error.code === "NOT_FOUND") notFound();
+    if (isGitHubError(error) && error.code === "NOT_FOUND") notFound();
+    console.error(`[gitbrag] loading user ${login} failed`, error);
     throw error;
   }
 }
@@ -58,14 +51,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const name = user.name ?? user.login;
   let description = `${name}'s open-source contributions: merged pull requests, projects and languages, on ${siteConfig.name}.`;
   try {
-    const { stats } = await getContributionReport(login);
-    description = `${formatNumber(stats.merged)} merged pull requests across ${formatNumber(stats.repositories)} open-source projects reaching ${formatCompact(stats.totalStars)} stars.`;
+    const result = await loadReport(login);
+    if (result.status === "ready") {
+      const { stats } = result.report;
+      description = `${formatNumber(stats.merged)} merged pull requests across ${formatNumber(stats.repositories)} open-source projects reaching ${formatCompact(stats.totalStars)} stars.`;
+    }
   } catch {
     /* keep the generic description; the page shows the error */
   }
   const title = `${name}'s open-source contributions`;
   return {
-    title: `${name} (@${user.login}) — open-source contributions`,
+    metadataBase: new URL(await requestSiteUrl()),
+    title: `${name} (@${user.login}) open-source contributions`,
     description,
     alternates: { canonical: `/u/${user.login}` },
     openGraph: { title, description, url: `/u/${user.login}`, type: "profile" },
@@ -81,24 +78,27 @@ export default async function ProfilePage({ params, searchParams }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl flex-1 px-5 py-10 md:px-8 md:py-14">
-        <ProfileHeader user={user} />
-        {!hasGitHubToken() ? (
-          <Notice tone="warning">
-            This instance has no <code>GITHUB_TOKEN</code> configured, so GitHub
-            allows only 60 requests per hour. Add a token to the environment to
-            make searches reliable.
-          </Notice>
-        ) : null}
-        <Suspense fallback={<ReportSkeleton />}>
-          <Report login={user.login} hideOrgs={hideOrgs} />
-        </Suspense>
-        <section className="border-border mt-16 border-t pt-10">
-          <span className="label">Look up someone else</span>
-          <UserSearch size="md" className="mt-3 max-w-xl" />
-        </section>
+      <main className="flex-1">
+        <div className="w-full px-4 sm:px-6">
+          <div className="border-border mx-auto w-full max-w-6xl border-x px-6 py-10 sm:px-10 md:py-14">
+            <ProfileHeader user={user} />
+            {!hasGitHubToken() ? (
+              <Notice tone="warning">
+                This instance has no <code>GITHUB_TOKEN</code> configured, so
+                GitHub allows only 60 requests per hour. Add a token to the
+                environment to make searches reliable.
+              </Notice>
+            ) : null}
+            <Suspense fallback={<ReportSkeleton />}>
+              <Report login={user.login} hideOrgs={hideOrgs} />
+            </Suspense>
+            <section className="border-border mt-16 border-t pt-10">
+              <span className="label">Look up someone else</span>
+              <UserSearch size="md" className="mt-3 max-w-xl" />
+            </section>
+          </div>
+        </div>
       </main>
-      <SiteFooter />
     </>
   );
 }
@@ -110,15 +110,23 @@ async function Report({
   login: string;
   hideOrgs: boolean;
 }) {
-  const report = await getContributionReport(login);
+  const result = await loadReport(login);
+  if (result.status === "pending") {
+    return (
+      <div className="mt-10">
+        <ReportWarmup login={login} initial={result.progress} />
+      </div>
+    );
+  }
+  const { report } = result;
   const { user } = report;
   const pullRequests = hideOrgs
     ? report.pullRequests.filter((pr) => !pr.inUserOrg)
     : report.pullRequests;
   const stats = hideOrgs ? computeStats(pullRequests) : report.stats;
   const orgPrCount = report.pullRequests.filter((pr) => pr.inUserOrg).length;
-  const url = profileUrl(user.login);
-  const cardBase = `${getSiteUrl()}/api/card/${encodeURIComponent(user.login)}`;
+  const url = await requestProfileUrl(user.login);
+  const cardBase = `${await requestSiteUrl()}/api/card/${encodeURIComponent(user.login)}`;
   const shareText = `${user.name ?? user.login} has ${formatNumber(stats.merged)} merged pull requests across ${formatNumber(stats.repositories)} open-source projects. See the full record on ${siteConfig.name}:`;
   const last12 = stats.monthly.slice(-12).map((m) => m.merged);
   const mergedLast12 = last12.reduce((a, b) => a + b, 0);
@@ -190,7 +198,6 @@ async function Report({
           <KpiCard
             label="Merged PRs"
             value={formatNumber(stats.merged)}
-            Icon={GitMerge}
             hint={
               <>
                 <span className="text-positive">
@@ -206,13 +213,11 @@ async function Report({
           <KpiCard
             label="Projects"
             value={formatNumber(stats.repositories)}
-            Icon={GitPullRequest}
             hint={`${formatNumber(stats.organizations)} ${pluralize(stats.organizations, "owner")} · ${formatNumber(stats.open)} open · ${formatNumber(stats.closed)} closed`}
           />
           <KpiCard
             label="Stars reached"
             value={formatCompact(stats.totalStars)}
-            Icon={Star}
             hint="Sum of stars across contributed repositories"
           />
           <KpiCard
@@ -220,9 +225,8 @@ async function Report({
             value={
               stats.firstContribution
                 ? new Date(stats.firstContribution).getFullYear()
-                : "—"
+                : "n/a"
             }
-            Icon={CalendarDays}
             hint={`${stats.yearsActive} ${pluralize(stats.yearsActive, "year")} · ${formatNumber(stats.languages.length)} ${pluralize(stats.languages.length, "language")}`}
           />
         </div>
@@ -233,23 +237,18 @@ async function Report({
           <TimelineChart monthly={stats.monthly} />
         </div>
         <div className="border-border bg-card flex flex-col gap-5 rounded-lg border p-5">
-          <div className="flex items-center justify-between">
-            <span className="label">Languages</span>
-            <Languages className="text-muted-foreground size-3.5" />
-          </div>
+          <span className="label">Languages</span>
           <LanguageBar languages={stats.languages} />
           <div className="border-border mt-auto grid grid-cols-2 gap-3 border-t pt-4 font-mono text-[11px]">
             <div>
-              <div className="text-muted-foreground">Lines added</div>
+              <div className="text-muted-foreground">Merge rate</div>
               <div className="tabular text-positive">
-                +{formatCompact(stats.additions)}
+                {Math.round(stats.mergeRate * 100)}%
               </div>
             </div>
             <div>
-              <div className="text-muted-foreground">Lines removed</div>
-              <div className="tabular text-negative">
-                −{formatCompact(stats.deletions)}
-              </div>
+              <div className="text-muted-foreground">Open right now</div>
+              <div className="tabular">{formatCompact(stats.open)}</div>
             </div>
           </div>
         </div>
@@ -259,10 +258,7 @@ async function Report({
         id="share"
         className="border-accent/30 bg-accent-soft/40 dark:bg-accent/5 mt-6 scroll-mt-20 rounded-lg border p-5"
       >
-        <div className="mb-4 flex items-center gap-2">
-          <span className="label text-accent">Share this card</span>
-          <Badge tone="accent">Free</Badge>
-        </div>
+        <span className="label text-accent mb-4 block">Share this card</span>
         <ShareBar
           url={url}
           login={user.login}

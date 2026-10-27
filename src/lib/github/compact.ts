@@ -10,7 +10,7 @@ import { computeStats } from "./stats";
 const STATES: PullRequestState[] = ["MERGED", "OPEN", "CLOSED"];
 
 /**
- * `[repoIndex, number, title, state, createdAt, mergedAt, closedAt, additions, deletions, inUserOrg]`
+ * `[repoIndex, number, title, state, createdAt, mergedAt, closedAt, inUserOrg]`
  * Dates are ISO strings, missing dates are "". Keeps the cached payload and the
  * data sent to the browser small enough for contributors with thousands of PRs.
  */
@@ -22,8 +22,6 @@ export type CompactPullRequest = [
   string,
   string,
   string,
-  number,
-  number,
   number,
 ];
 
@@ -56,8 +54,6 @@ export function compactPullRequests(pullRequests: PullRequest[]): {
       pr.createdAt,
       pr.mergedAt ?? "",
       pr.closedAt ?? "",
-      pr.additions,
-      pr.deletions,
       pr.inUserOrg ? 1 : 0,
     ];
   });
@@ -69,18 +65,7 @@ export function expandPullRequests(
   prs: CompactPullRequest[],
 ): PullRequest[] {
   return prs.map(
-    ([
-      repoIdx,
-      number,
-      title,
-      state,
-      createdAt,
-      mergedAt,
-      closedAt,
-      additions,
-      deletions,
-      inOrg,
-    ]) => {
+    ([repoIdx, number, title, state, createdAt, mergedAt, closedAt, inOrg]) => {
       const repo = repos[repoIdx];
       return {
         id: `${repo.nameWithOwner}#${number}`,
@@ -91,8 +76,6 @@ export function expandPullRequests(
         createdAt,
         mergedAt: mergedAt || null,
         closedAt: closedAt || null,
-        additions,
-        deletions,
         repo,
         inUserOrg: inOrg === 1,
       };

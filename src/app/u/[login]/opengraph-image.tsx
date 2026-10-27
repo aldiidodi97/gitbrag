@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
 import { loadCardFonts } from "@/lib/cards/fonts";
-import { CARD_SIZES, ShareCard } from "@/lib/cards/share-card";
-import { getContributionReport } from "@/lib/github";
-import { getSiteUrl } from "@/lib/site";
+import { CARD_SIZES, PendingCard, ShareCard } from "@/lib/cards/share-card";
+import { getUser, loadReport } from "@/lib/github";
+import { requestSiteUrl } from "@/lib/site-request";
 
 export const alt = "Open-source contributions on GitBrag";
 export const size = CARD_SIZES.og;
@@ -14,13 +14,20 @@ export default async function OpenGraphImage({
   params: Promise<{ login: string }>;
 }) {
   const { login } = await params;
-  const [report, fonts] = await Promise.all([
-    getContributionReport(login),
+  const [result, fonts] = await Promise.all([
+    loadReport(login),
     loadCardFonts(),
   ]);
-  const siteHost = new URL(getSiteUrl()).host;
+  const siteHost = new URL(await requestSiteUrl()).host;
+  if (result.status === "pending") {
+    const user = await getUser(login);
+    return new ImageResponse(
+      <PendingCard user={user} format="og" siteHost={siteHost} />,
+      { ...size, fonts, headers: { "Cache-Control": "no-store" } },
+    );
+  }
   return new ImageResponse(
-    <ShareCard report={report} format="og" siteHost={siteHost} />,
+    <ShareCard report={result.report} format="og" siteHost={siteHost} />,
     { ...size, fonts },
   );
 }

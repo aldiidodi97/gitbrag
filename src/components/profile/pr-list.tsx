@@ -144,9 +144,6 @@ export function PullRequestList({
               <th className="hidden px-4 py-2 font-normal md:table-cell">
                 Repository
               </th>
-              <th className="hidden px-4 py-2 text-right font-normal sm:table-cell">
-                Diff
-              </th>
               <th className="px-4 py-2 text-right font-normal">Date</th>
             </tr>
           </thead>
@@ -183,14 +180,6 @@ export function PullRequestList({
                   <td className="text-muted-foreground hidden max-w-[220px] truncate px-4 py-2.5 font-mono text-xs md:table-cell">
                     {pr.repo.nameWithOwner}
                     <span className="text-border-strong"> #{pr.number}</span>
-                  </td>
-                  <td className="tabular hidden px-4 py-2.5 text-right font-mono text-[11px] sm:table-cell">
-                    <span className="text-positive">
-                      +{pr.additions.toLocaleString("en-US")}
-                    </span>{" "}
-                    <span className="text-negative">
-                      −{pr.deletions.toLocaleString("en-US")}
-                    </span>
                   </td>
                   <td className="tabular text-muted-foreground px-4 py-2.5 text-right font-mono text-[11px] whitespace-nowrap">
                     {formatDate(pr.mergedAt ?? pr.createdAt, {

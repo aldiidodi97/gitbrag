@@ -34,8 +34,6 @@ function pr(overrides: Partial<PullRequest> = {}): PullRequest {
     createdAt: "2024-01-10T00:00:00Z",
     mergedAt: "2024-01-12T00:00:00Z",
     closedAt: "2024-01-12T00:00:00Z",
-    additions: 10,
-    deletions: 2,
     repo: repo(),
     inUserOrg: false,
     ...overrides,
@@ -85,8 +83,6 @@ describe("summarizeRepositories", () => {
     expect(repos[0]).toMatchObject({
       pullRequests: 2,
       merged: 1,
-      additions: 20,
-      deletions: 4,
     });
     expect(repos[1]).toMatchObject({
       pullRequests: 2,

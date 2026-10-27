@@ -32,15 +32,15 @@ export function TimelineChart({ monthly }: { monthly: MonthBucket[] }) {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between gap-4">
-        <div>
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
+        <div className="min-w-0">
           <span className="label">Merged pull requests over time</span>
           <div className="tabular mt-1 font-mono text-sm">
             {total.toLocaleString("en-US")}{" "}
             <span className="text-muted-foreground">in range</span>
           </div>
         </div>
-        <div className="border-border bg-border flex gap-px overflow-hidden rounded-md border font-mono text-[11px]">
+        <div className="border-border bg-border flex shrink-0 gap-px overflow-hidden rounded-md border font-mono text-[11px]">
           {ranges.map((r) => (
             <button
               key={r.key}
