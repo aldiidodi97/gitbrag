@@ -11,6 +11,8 @@ import {
 import { requestSiteUrl } from "@/lib/site-request";
 
 const cacheHeader = `public, s-maxage=${REPORT_REVALIDATE_SECONDS}, stale-while-revalidate=${REPORT_REVALIDATE_SECONDS}`;
+// Netlify's CDN only keys cached responses on the query parameters listed here.
+const varyHeader = "query=format|download|theme";
 
 /**
  * `/api/card/<login>.svg`  → live README badge (SVG).
@@ -63,6 +65,7 @@ export async function GET(
         headers: {
           "Content-Type": "image/svg+xml; charset=utf-8",
           "Cache-Control": cacheHeader,
+          "Netlify-Vary": varyHeader,
         },
       },
     );
@@ -80,6 +83,7 @@ export async function GET(
   );
   const headers = new Headers(image.headers);
   headers.set("Cache-Control", cacheHeader);
+  headers.set("Netlify-Vary", varyHeader);
   if (searchParams.get("download")) {
     headers.set(
       "Content-Disposition",
