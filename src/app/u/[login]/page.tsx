@@ -79,22 +79,26 @@ export default async function ProfilePage({ params, searchParams }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl flex-1 px-5 py-10 md:px-8 md:py-14">
-        <ProfileHeader user={user} />
-        {!hasGitHubToken() ? (
-          <Notice tone="warning">
-            This instance has no <code>GITHUB_TOKEN</code> configured, so GitHub
-            allows only 60 requests per hour. Add a token to the environment to
-            make searches reliable.
-          </Notice>
-        ) : null}
-        <Suspense fallback={<ReportSkeleton />}>
-          <Report login={user.login} hideOrgs={hideOrgs} />
-        </Suspense>
-        <section className="border-border mt-16 border-t pt-10">
-          <span className="label">Look up someone else</span>
-          <UserSearch size="md" className="mt-3 max-w-xl" />
-        </section>
+      <main className="flex-1">
+        <div className="w-full px-4 sm:px-6">
+          <div className="border-border mx-auto w-full max-w-6xl border-x px-6 py-10 sm:px-10 md:py-14">
+            <ProfileHeader user={user} />
+            {!hasGitHubToken() ? (
+              <Notice tone="warning">
+                This instance has no <code>GITHUB_TOKEN</code> configured, so
+                GitHub allows only 60 requests per hour. Add a token to the
+                environment to make searches reliable.
+              </Notice>
+            ) : null}
+            <Suspense fallback={<ReportSkeleton />}>
+              <Report login={user.login} hideOrgs={hideOrgs} />
+            </Suspense>
+            <section className="border-border mt-16 border-t pt-10">
+              <span className="label">Look up someone else</span>
+              <UserSearch size="md" className="mt-3 max-w-xl" />
+            </section>
+          </div>
+        </div>
       </main>
       <SiteFooter />
     </>
