@@ -119,7 +119,7 @@ export function UserSearch({
         onSubmit={onSubmit}
         role="search"
         className={cn(
-          "border-border-strong bg-card focus-within:ring-ring flex items-center gap-2 rounded-lg border p-1.5 shadow-sm transition-shadow focus-within:ring-2",
+          "border-border-strong bg-card focus-within:ring-ring flex items-center gap-2 border p-1.5 transition-shadow focus-within:ring-2",
           tall ? "h-14" : "h-11",
         )}
       >
@@ -154,7 +154,12 @@ export function UserSearch({
             tall ? "text-base" : "text-sm",
           )}
         />
-        <Button type="submit" size={tall ? "md" : "sm"} disabled={pending}>
+        <Button
+          type="submit"
+          size={tall ? "md" : "sm"}
+          disabled={pending}
+          className="rounded-none font-mono text-xs tracking-[0.08em] uppercase"
+        >
           {pending ? <Loader2 className="animate-spin" /> : null}
           Brag
         </Button>
@@ -164,7 +169,7 @@ export function UserSearch({
         <ul
           id={listId}
           role="listbox"
-          className="border-border bg-card absolute top-full right-0 left-0 z-20 mt-2 overflow-hidden rounded-lg border shadow-lg"
+          className="border-border bg-card absolute top-full right-0 left-0 z-20 mt-2 overflow-hidden border shadow-lg"
         >
           {suggestions.map((user, i) => (
             <li key={user.login} role="option" aria-selected={i === active}>

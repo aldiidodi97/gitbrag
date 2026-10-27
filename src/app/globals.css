@@ -83,7 +83,7 @@ body {
   background-size: 22px 22px;
 }
 
-.bg-hatch-unused {
+.bg-hatch {
   background-image: repeating-linear-gradient(
     -45deg,
     color-mix(in oklch, var(--fg) 8%, transparent) 0,
