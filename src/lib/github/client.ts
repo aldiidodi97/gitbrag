@@ -14,6 +14,14 @@ export class GitHubError extends Error {
   }
 }
 
+/** `instanceof` is unreliable when server bundles each carry their own copy of this module. */
+export function isGitHubError(error: unknown): error is GitHubError {
+  return (
+    error instanceof GitHubError ||
+    (error instanceof Error && error.name === "GitHubError")
+  );
+}
+
 interface GraphQLErrorItem {
   type?: string;
   message: string;

@@ -71,7 +71,7 @@ export default function HomePage() {
         >
           <div className="mx-auto max-w-6xl px-5 md:px-8">
             <div className="grid gap-10 md:grid-cols-2 md:items-center">
-              <div>
+              <div className="min-w-0">
                 <span className="label">[Share]</span>
                 <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance md:text-4xl">
                   Built to be posted.
@@ -86,7 +86,7 @@ export default function HomePage() {
                   {`![Open-source contributions](https://gitbrag.netlify.app/api/card/<username>.svg)`}
                 </pre>
               </div>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid min-w-0 grid-cols-3 gap-3">
                 {[
                   { label: "Link preview", ratio: "aspect-[1.91/1]" },
                   { label: "Square 1:1", ratio: "aspect-square" },

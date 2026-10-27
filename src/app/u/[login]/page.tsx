@@ -25,7 +25,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import {
-  GitHubError,
+  isGitHubError,
   compactPullRequests,
   loadReport,
   getUser,
@@ -49,7 +49,8 @@ async function loadUser(login: string): Promise<GitHubUser> {
   try {
     return await getUser(login);
   } catch (error) {
-    if (error instanceof GitHubError && error.code === "NOT_FOUND") notFound();
+    if (isGitHubError(error) && error.code === "NOT_FOUND") notFound();
+    console.error(`[gitbrag] loading user ${login} failed`, error);
     throw error;
   }
 }

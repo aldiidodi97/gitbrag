@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GitHubError, sanitizeSearchTerm, searchUsers } from "@/lib/github";
+import { isGitHubError, sanitizeSearchTerm, searchUsers } from "@/lib/github";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
       },
     );
   } catch (error) {
-    const status = error instanceof GitHubError ? error.status : 502;
+    const status = isGitHubError(error) ? error.status : 502;
     return NextResponse.json(
       { users: [], error: "search_unavailable" },
       { status },

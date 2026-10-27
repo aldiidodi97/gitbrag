@@ -1,5 +1,5 @@
 export * from "./types";
-export { GitHubError, hasGitHubToken } from "./client";
+export { GitHubError, hasGitHubToken, isGitHubError } from "./client";
 export {
   DEFAULT_BUDGET_MS,
   getUser,

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GitHubError, loadReport } from "@/lib/github";
+import { isGitHubError, loadReport } from "@/lib/github";
 
 /** Each call works on the report for up to this long before handing back progress. */
 const SLICE_MS = 6_500;
@@ -24,7 +24,7 @@ export async function GET(
       headers: { "Cache-Control": "no-store" },
     });
   } catch (error) {
-    if (error instanceof GitHubError) {
+    if (isGitHubError(error)) {
       return NextResponse.json(
         { status: "error", error: error.message, code: error.code },
         { status: error.status, headers: { "Cache-Control": "no-store" } },

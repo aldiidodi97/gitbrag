@@ -4,7 +4,7 @@ import { loadCardFonts } from "@/lib/cards/fonts";
 import { renderBadgeSvg } from "@/lib/cards/badge-svg";
 import { CARD_SIZES, parseCardFormat, ShareCard } from "@/lib/cards/share-card";
 import {
-  GitHubError,
+  isGitHubError,
   loadReport,
   REPORT_REVALIDATE_SECONDS,
 } from "@/lib/github";
@@ -46,7 +46,7 @@ export async function GET(
     }
     report = result.report;
   } catch (error) {
-    if (error instanceof GitHubError) {
+    if (isGitHubError(error)) {
       return NextResponse.json(
         { error: error.message },
         { status: error.status },
