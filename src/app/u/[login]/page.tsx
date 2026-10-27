@@ -1,12 +1,4 @@
-import {
-  AlertTriangle,
-  Building2,
-  CalendarDays,
-  GitMerge,
-  GitPullRequest,
-  Languages,
-  Star,
-} from "lucide-react";
+import { AlertTriangle, Building2, GitPullRequest } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -22,7 +14,6 @@ import { TimelineChart } from "@/components/profile/timeline-chart";
 import { UserSearch } from "@/components/search/user-search";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import {
   isGitHubError,
@@ -72,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${name}'s open-source contributions`;
   return {
     metadataBase: new URL(await requestSiteUrl()),
-    title: `${name} (@${user.login}) — open-source contributions`,
+    title: `${name} (@${user.login}) open-source contributions`,
     description,
     alternates: { canonical: `/u/${user.login}` },
     openGraph: { title, description, url: `/u/${user.login}`, type: "profile" },
@@ -205,7 +196,6 @@ async function Report({
           <KpiCard
             label="Merged PRs"
             value={formatNumber(stats.merged)}
-            Icon={GitMerge}
             hint={
               <>
                 <span className="text-positive">
@@ -221,13 +211,11 @@ async function Report({
           <KpiCard
             label="Projects"
             value={formatNumber(stats.repositories)}
-            Icon={GitPullRequest}
             hint={`${formatNumber(stats.organizations)} ${pluralize(stats.organizations, "owner")} · ${formatNumber(stats.open)} open · ${formatNumber(stats.closed)} closed`}
           />
           <KpiCard
             label="Stars reached"
             value={formatCompact(stats.totalStars)}
-            Icon={Star}
             hint="Sum of stars across contributed repositories"
           />
           <KpiCard
@@ -235,9 +223,8 @@ async function Report({
             value={
               stats.firstContribution
                 ? new Date(stats.firstContribution).getFullYear()
-                : "—"
+                : "n/a"
             }
-            Icon={CalendarDays}
             hint={`${stats.yearsActive} ${pluralize(stats.yearsActive, "year")} · ${formatNumber(stats.languages.length)} ${pluralize(stats.languages.length, "language")}`}
           />
         </div>
@@ -248,10 +235,7 @@ async function Report({
           <TimelineChart monthly={stats.monthly} />
         </div>
         <div className="border-border bg-card flex flex-col gap-5 rounded-lg border p-5">
-          <div className="flex items-center justify-between">
-            <span className="label">Languages</span>
-            <Languages className="text-muted-foreground size-3.5" />
-          </div>
+          <span className="label">Languages</span>
           <LanguageBar languages={stats.languages} />
           <div className="border-border mt-auto grid grid-cols-2 gap-3 border-t pt-4 font-mono text-[11px]">
             <div>
@@ -272,10 +256,7 @@ async function Report({
         id="share"
         className="border-accent/30 bg-accent-soft/40 dark:bg-accent/5 mt-6 scroll-mt-20 rounded-lg border p-5"
       >
-        <div className="mb-4 flex items-center gap-2">
-          <span className="label text-accent">Share this card</span>
-          <Badge tone="accent">Free</Badge>
-        </div>
+        <span className="label text-accent mb-4 block">Share this card</span>
         <ShareBar
           url={url}
           login={user.login}

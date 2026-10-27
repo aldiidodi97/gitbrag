@@ -68,7 +68,7 @@ export function ReportWarmup({
 
   if (state.status === "error") {
     return (
-      <div className="rounded-2xl border border-rose-500/30 bg-rose-500/5 p-6 text-sm text-rose-600 dark:text-rose-400">
+      <div className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-6 text-sm text-rose-600 dark:text-rose-400">
         {state.error}
       </div>
     );
@@ -82,9 +82,9 @@ export function ReportWarmup({
       : null;
 
   return (
-    <div className="border-border bg-card rounded-2xl border p-6 sm:p-8">
+    <div className="border-border bg-card rounded-lg border p-6 sm:p-8">
       <div className="flex items-center gap-3">
-        <Loader2 className="text-primary size-5 animate-spin" aria-hidden />
+        <Loader2 className="text-accent size-5 animate-spin" aria-hidden />
         <div>
           <p className="font-semibold">
             {state.status === "ready"
@@ -108,7 +108,7 @@ export function ReportWarmup({
         aria-valuenow={percent ?? undefined}
       >
         <div
-          className="bg-primary h-full rounded-full transition-all duration-700"
+          className="bg-accent h-full rounded-full transition-all duration-700"
           style={{ width: `${percent ?? 8}%` }}
         />
       </div>

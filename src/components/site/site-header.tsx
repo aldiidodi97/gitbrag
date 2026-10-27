@@ -1,26 +1,31 @@
-import { Star } from "lucide-react";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 
+const nav = [
+  { label: "What counts", href: "/#what-counts" },
+  { label: "Share cards", href: "/#share" },
+  { label: "FAQ", href: "/#faq" },
+];
+
 export function SiteHeader() {
   return (
-    <header className="border-border bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
+    <header className="border-border bg-background sticky top-0 z-40 border-b">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 md:px-8">
         <div className="flex items-center gap-8">
           <Logo />
           <nav className="text-muted-foreground hidden items-center gap-6 text-sm md:flex">
-            <Link href="/#features" className="hover:text-foreground">
-              Features
-            </Link>
-            <Link href="/#how-it-works" className="hover:text-foreground">
-              How it works
-            </Link>
-            <Link href="/#faq" className="hover:text-foreground">
-              FAQ
-            </Link>
+            {nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="hover:text-foreground"
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
         <div className="flex items-center gap-2">
@@ -32,12 +37,11 @@ export function SiteHeader() {
             target="_blank"
             rel="noreferrer"
           >
-            <Star />
-            Star on GitHub
+            GitHub
           </ButtonLink>
           <ThemeToggle />
           <ButtonLink href="/#search" size="sm">
-            Get your card
+            Look up a username
           </ButtonLink>
         </div>
       </div>

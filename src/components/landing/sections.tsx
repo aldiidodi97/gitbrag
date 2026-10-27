@@ -1,164 +1,133 @@
-import {
-  Check,
-  GitMerge,
-  Image as ImageIcon,
-  Search,
-  Share2,
-  Sparkles,
-  Zap,
-} from "lucide-react";
-import type { ReactNode } from "react";
+import Image from "next/image";
+import { siteConfig } from "@/lib/site";
 
-export function SectionHeading({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow: string;
-  title: ReactNode;
-  description?: string;
-}) {
-  return (
-    <div className="mx-auto max-w-2xl text-center">
-      <span className="label">[{eyebrow}]</span>
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance md:text-4xl">
-        {title}
-      </h2>
-      {description ? (
-        <p className="text-muted-foreground mt-4">{description}</p>
-      ) : null}
-    </div>
-  );
-}
-
-const features = [
-  {
-    id: "F-01",
-    title: "Merged, not just opened",
-    description:
-      "Counts the pull requests that actually landed in projects you don't own. Forks and your own repositories are filtered out automatically.",
-    Icon: GitMerge,
-  },
-  {
-    id: "F-02",
-    title: "Every project, ranked",
-    description:
-      "See which repositories you shipped to most, how many stars they carry, and the languages you touched along the way.",
-    Icon: Sparkles,
-  },
-  {
-    id: "F-03",
-    title: "Share cards that look good",
-    description:
-      "A rich preview is generated for every profile link, plus downloadable square and story-size cards for Instagram, LinkedIn and X.",
-    Icon: ImageIcon,
-  },
-  {
-    id: "F-04",
-    title: "Fast and anonymous",
-    description:
-      "No sign-up, no OAuth, nothing to install. Results are cached for an hour so shared links open instantly.",
-    Icon: Zap,
-  },
+const included = [
+  "Pull requests you authored in public repositories owned by someone else",
+  "Merged, open and closed pull requests, each counted separately",
+  "Archived projects (the work still happened)",
 ];
 
-export function Features() {
+const excluded = [
+  "Your own repositories and your forks",
+  "Private repositories and anything GitHub does not expose publicly",
+  "Issues, reviews and direct commits (pull requests only)",
+  "Optionally, repositories of organizations you belong to (one toggle on the profile)",
+];
+
+export function WhatCounts() {
   return (
     <section
-      id="features"
-      className="border-border scroll-mt-20 border-t py-20 md:py-28"
+      id="what-counts"
+      className="border-border scroll-mt-20 border-t py-16 md:py-24"
     >
-      <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <SectionHeading
-          eyebrow="Features"
-          title="Everything you need to prove your open-source track record."
-        />
-        <div className="border-border bg-border mt-14 grid gap-px overflow-hidden rounded-lg border md:grid-cols-2">
-          {features.map(({ id, title, description, Icon }) => (
-            <article key={id} className="bg-card flex flex-col gap-4 p-7">
-              <div className="flex items-center justify-between">
-                <span className="border-border bg-muted text-accent flex size-9 items-center justify-center rounded-md border">
-                  <Icon className="size-4" />
-                </span>
-                <span className="label">{id}</span>
-              </div>
-              <h3 className="text-lg font-semibold">{title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {description}
-              </p>
-            </article>
-          ))}
+      <div className="mx-auto grid max-w-6xl gap-10 px-5 md:grid-cols-5 md:gap-16 md:px-8">
+        <div className="md:col-span-2">
+          <h2 className="text-3xl font-semibold tracking-tight text-balance md:text-4xl">
+            Only work that landed in other people&apos;s projects.
+          </h2>
+          <p className="text-muted-foreground mt-4">
+            GitHub&apos;s contribution graph mixes in commits to your own
+            repositories and private work. GitBrag asks a narrower question:
+            which pull requests did you send upstream, and which were merged?
+          </p>
+          <p className="text-muted-foreground mt-4 text-sm">
+            Data comes from GitHub&apos;s public API, is cached for one hour,
+            and is fetched without you signing in to anything.
+          </p>
+        </div>
+        <div className="border-border divide-border grid divide-y rounded-lg border md:col-span-3 md:grid-cols-2 md:divide-x md:divide-y-0">
+          <div className="p-6">
+            <h3 className="text-accent font-semibold">Counted</h3>
+            <ul className="mt-4 flex flex-col gap-3 text-sm">
+              {included.map((item) => (
+                <li key={item} className="flex gap-3">
+                  <span className="bg-accent mt-2 size-1.5 shrink-0 rounded-full" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="p-6">
+            <h3 className="text-muted-foreground font-semibold">Left out</h3>
+            <ul className="text-muted-foreground mt-4 flex flex-col gap-3 text-sm">
+              {excluded.map((item) => (
+                <li key={item} className="flex gap-3">
+                  <span className="bg-border-strong mt-2 size-1.5 shrink-0 rounded-full" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-const steps = [
-  {
-    Icon: Search,
-    title: "Type a username",
-    text: "Any public GitHub account works: yours, a teammate's, a maintainer you admire.",
-  },
-  {
-    Icon: GitMerge,
-    title: "We collect the pull requests",
-    text: "GitBrag queries GitHub's API for every pull request the user authored in repositories they don't own, then groups and ranks them.",
-  },
-  {
-    Icon: Share2,
-    title: "Share the card",
-    text: "Post the link on X, LinkedIn, Threads or Bluesky, download a PNG, or embed the live SVG badge in your README.",
-  },
+const cards = [
+  { format: "og", label: "Link preview, 1200 x 630", width: 1200, height: 630 },
+  { format: "square", label: "Square, 1080 x 1080", width: 1080, height: 1080 },
+  { format: "story", label: "Story, 1080 x 1920", width: 1080, height: 1920 },
 ];
 
-export function HowItWorks() {
+export function ShareSection({ siteUrl }: { siteUrl: string }) {
+  const login = siteConfig.exampleLogin;
   return (
     <section
-      id="how-it-works"
-      className="border-border bg-muted/40 scroll-mt-20 border-t py-20 md:py-28"
+      id="share"
+      className="border-border bg-muted/40 scroll-mt-20 border-t py-16 md:py-24"
     >
-      <div className="mx-auto grid max-w-6xl gap-12 px-5 md:grid-cols-2 md:items-center md:px-8">
-        <div>
-          <span className="label">[How it works]</span>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance md:text-4xl">
-            From username to brag-worthy card in seconds.
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <div className="max-w-2xl">
+          <h2 className="text-3xl font-semibold tracking-tight text-balance md:text-4xl">
+            One link, three images, one README badge.
           </h2>
           <p className="text-muted-foreground mt-4">
-            No account, no browser extension. GitBrag reads only public data and
-            never asks for access to your GitHub account.
+            Every profile link unfurls into a preview card on X, LinkedIn,
+            Bluesky, Threads, WhatsApp and Slack. The same card is available as
+            a square or story-size PNG, and the SVG badge below updates itself
+            from the live data.
           </p>
-          <ul className="mt-8 flex flex-col gap-3 text-sm">
-            {[
-              "Pull requests to repositories you don't own",
-              "Merged, open and closed states kept separate",
-              "Hide pull requests to your own organizations with one toggle",
-            ].map((item) => (
-              <li key={item} className="flex items-start gap-3">
-                <Check className="text-accent mt-0.5 size-4 shrink-0" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
         </div>
-        <ol className="border-border bg-border flex flex-col gap-px overflow-hidden rounded-lg border">
-          {steps.map(({ Icon, title, text }, i) => (
-            <li key={title} className="bg-card flex gap-4 p-6">
-              <span className="border-border bg-muted text-accent flex size-9 shrink-0 items-center justify-center rounded-md border font-mono text-xs">
-                0{i + 1}
-              </span>
-              <div>
-                <div className="flex items-center gap-2 font-semibold">
-                  <Icon className="text-muted-foreground size-4" />
-                  {title}
-                </div>
-                <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
-                  {text}
-                </p>
-              </div>
-            </li>
+        <div className="mt-10 flex flex-col gap-6 md:flex-row md:gap-4">
+          {cards.map((card) => (
+            <figure key={card.format} className="flex shrink-0 flex-col gap-2">
+              <Image
+                src={`/api/card/${login}.png?format=${card.format}`}
+                alt={`${card.label} share card for ${login}`}
+                width={card.width}
+                height={card.height}
+                unoptimized
+                className="border-border h-44 w-auto rounded-md border md:h-72"
+              />
+              <figcaption className="text-muted-foreground font-mono text-xs">
+                {card.label}
+              </figcaption>
+            </figure>
           ))}
-        </ol>
+        </div>
+        <div className="mt-10 grid gap-6 md:grid-cols-5 md:items-center">
+          <div className="md:col-span-2">
+            <h3 className="font-semibold">README badge</h3>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Paste this into any Markdown file. It renders the current counts
+              and links back to the profile.
+            </p>
+          </div>
+          <div className="min-w-0 md:col-span-3">
+            <Image
+              src={`/api/card/${login}.svg`}
+              alt={`README badge for ${login}`}
+              width={495}
+              height={195}
+              unoptimized
+              className="h-auto w-full max-w-md"
+            />
+            <pre className="border-border bg-card text-muted-foreground mt-3 overflow-x-auto rounded-md border p-4 font-mono text-xs">
+              {`[![Open-source contributions](${siteUrl}/api/card/<username>.svg)](${siteUrl}/u/<username>)`}
+            </pre>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -166,20 +135,20 @@ export function HowItWorks() {
 
 const faqs = [
   {
-    q: "What counts as an open-source contribution?",
-    a: "Pull requests you authored in public repositories that you do not own. Your own repositories and forks are excluded. Merged, open and closed pull requests are shown separately, and merged ones drive the headline number.",
+    q: "Why is my number lower than the contributions on my GitHub profile?",
+    a: "GitHub's graph counts commits, issues and reviews, including those in your own repositories and private work. GitBrag counts only pull requests you sent to repositories you do not own.",
   },
   {
-    q: "Why does my count differ from my GitHub profile graph?",
-    a: "GitHub's contribution graph includes commits to your own repositories and private work. GitBrag deliberately only counts pull requests to other people's projects.",
+    q: "Someone's profile shows a progress bar. Is it broken?",
+    a: "No. Very active contributors have thousands of pull requests, and GitHub returns them 100 at a time. The page keeps fetching in the background and switches to the full report on its own, usually within half a minute. After that it loads instantly for an hour.",
   },
   {
-    q: "Do I need to sign in?",
-    a: "No. GitBrag only reads public data with a server-side token. Nothing is stored about you beyond a one-hour cache of the results.",
+    q: "Does GitBrag need access to my GitHub account?",
+    a: "No. It reads public data with its own server-side token. There is no sign-in and nothing is stored about you beyond a one-hour cache of the report.",
   },
   {
-    q: "Can I self-host it?",
-    a: "Yes. GitBrag is MIT licensed and deploys to Netlify or Vercel with one environment variable. See the README on GitHub.",
+    q: "Can I run my own copy?",
+    a: "Yes. GitBrag is MIT licensed, deploys to Netlify or Vercel, and needs one environment variable: a GitHub token with public read access. The README on GitHub has the steps.",
   },
 ];
 
@@ -187,13 +156,15 @@ export function Faq() {
   return (
     <section
       id="faq"
-      className="border-border scroll-mt-20 border-t py-20 md:py-28"
+      className="border-border scroll-mt-20 border-t py-16 md:py-24"
     >
-      <div className="mx-auto max-w-3xl px-5 md:px-8">
-        <SectionHeading eyebrow="FAQ" title="Questions, answered." />
-        <dl className="divide-border border-border bg-card mt-12 divide-y rounded-lg border">
+      <div className="mx-auto grid max-w-6xl gap-10 px-5 md:grid-cols-5 md:gap-16 md:px-8">
+        <h2 className="text-3xl font-semibold tracking-tight md:col-span-2 md:text-4xl">
+          Questions people ask
+        </h2>
+        <dl className="divide-border divide-y md:col-span-3">
           {faqs.map(({ q, a }) => (
-            <div key={q} className="p-6">
+            <div key={q} className="py-5 first:pt-0 last:pb-0">
               <dt className="font-semibold">{q}</dt>
               <dd className="text-muted-foreground mt-2 text-sm leading-relaxed">
                 {a}

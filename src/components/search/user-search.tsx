@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Loader2, Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -157,7 +157,6 @@ export function UserSearch({
         <Button type="submit" size={tall ? "md" : "sm"} disabled={pending}>
           {pending ? <Loader2 className="animate-spin" /> : null}
           Brag
-          <ArrowRight />
         </Button>
       </form>
       {error ? <p className="text-negative mt-2 text-sm">{error}</p> : null}

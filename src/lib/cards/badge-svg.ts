@@ -43,7 +43,7 @@ export function renderBadgeSvg(
   const name = esc(user.name ?? user.login);
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${name}: ${stats.merged} merged open-source pull requests">
-  <title>${name} — open-source contributions on GitBrag</title>
+  <title>${name}: open-source contributions on GitBrag</title>
   <style>
     .t{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:${fg}}
     .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
