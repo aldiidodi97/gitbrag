@@ -141,7 +141,7 @@ export function UserSearch({
           }}
           onFocus={() => suggestions.length > 0 && setOpen(true)}
           onKeyDown={onKeyDown}
-          placeholder="GitHub username, e.g. torvalds"
+          placeholder="GitHub username"
           autoComplete="off"
           autoCapitalize="none"
           spellCheck={false}
