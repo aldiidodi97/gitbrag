@@ -33,7 +33,7 @@ export function NotFoundView({
               <p className="text-muted-foreground mt-4 max-w-prose text-center text-sm tracking-tight text-balance lg:text-base">
                 {description}
               </p>
-              <ButtonLink href="/" className="mt-10">
+              <ButtonLink href="/" variant="raised" className="mt-10">
                 Back home
               </ButtonLink>
             </div>
